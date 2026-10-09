@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "walkthru",
-  "description": "WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package.",
+  "description": "WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package, and a guardrails plugin that enforces the evidence rules with hooks.",
   "owner": {
     "name": "WalkThru internal toolkit"
   },
@@ -95,6 +95,16 @@
       "description": "WalkThru Site and operations workflows (1 skills): Daily site report and next-day priorities. Evidence-based drafts; optional Microsoft 365 read access.",
       "version": "2.1.0",
       "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-guardrails",
+      "source": "./plugins/walkthru-guardrails",
+      "description": "Hooks that enforce the WalkThru evidence rules around every skill: connector actions stay read-only, originals stay intact, identity and bank details stay out of reports, every tool call is audited, each session starts with date, project scope and rules. No skills; install with walkthru-general or walkthru-workflows.",
+      "version": "2.1.0",
+      "category": "security",
       "author": {
         "name": "WalkThru internal toolkit"
       }

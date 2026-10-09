@@ -16,12 +16,17 @@
     {
       "check": "Plugins and marketplace",
       "status": "passed",
-      "detail": "9 plugins match source; marketplace lists them all"
+      "detail": "9 skill plugins match source; marketplace lists them and walkthru-guardrails"
+    },
+    {
+      "check": "Guardrail hooks",
+      "status": "passed",
+      "detail": "12 hook events, 17 scripts wired, managed template force-enables walkthru-guardrails"
     },
     {
       "check": "claude plugin validate",
       "status": "passed",
-      "detail": "claude plugin validate passed: walkthru, walkthru-engineering, walkthru-estimation-commercial, walkthru-finance-commercial, walkthru-general, walkthru-hr-admin, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
+      "detail": "claude plugin validate passed: walkthru, walkthru-engineering, walkthru-estimation-commercial, walkthru-finance-commercial, walkthru-general, walkthru-hr-admin, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows, walkthru-guardrails"
     },
     {
       "check": "Package/source parity",
@@ -46,7 +51,7 @@
     {
       "check": "Syntax and config",
       "status": "passed",
-      "detail": "27 maintained/generated Python files parsed; JSON checked, connector not authenticated"
+      "detail": "66 maintained/generated Python files parsed; JSON checked, connector not authenticated"
     },
     {
       "check": "Catalogue links",
@@ -56,8 +61,8 @@
     {
       "check": "Original helper regressions",
       "status": "passed",
-      "tests": 39,
-      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.039s\n\nOK\n"
+      "tests": 89,
+      "detail": ".........................................................................................\n----------------------------------------------------------------------\nRan 89 tests in 1.032s\n\nOK\n"
     },
     {
       "check": "Everyday invoice regressions",

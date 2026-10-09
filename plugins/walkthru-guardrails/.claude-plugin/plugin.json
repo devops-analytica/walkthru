@@ -1,0 +1,14 @@
+{
+  "name": "walkthru-guardrails",
+  "version": "2.1.0",
+  "description": "Hooks that enforce the WalkThru evidence rules around every skill: connector actions stay read-only, originals stay intact, identity and bank details stay out of reports, every tool call is audited, each session starts with date, project scope and rules. No skills; install with walkthru-general or walkthru-workflows.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  },
+  "keywords": [
+    "hooks",
+    "governance",
+    "audit",
+    "walkthru"
+  ]
+}

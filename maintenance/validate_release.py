@@ -5,7 +5,7 @@ from pathlib import Path
 from zipfile import ZipFile
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'maintenance'))
-from build_release import tree,digest,HELPERS,VERSION,MCP,included,plugin_name
+from build_release import tree,digest,HELPERS,VERSION,MCP,included,plugin_name,GUARDRAILS
 MAX_DESCRIPTION=1024
 
 def main():
@@ -58,14 +58,34 @@ def main():
    assert {p.name for p in (plugin/'commands').glob('*.md')} if (plugin/'commands').exists() else set()==expected_commands,f'{c}: commands'
    assert '{{' not in (plugin/'README.md').read_text(),f'{c}: README placeholder left'
   marketplace=json.loads((ROOT/'.claude-plugin/marketplace.json').read_text())
-  assert marketplace['name']=='walkthru' and {p['name'] for p in marketplace['plugins']}=={plugin_name(c) for c in plugins}
+  assert marketplace['name']=='walkthru' and {p['name'] for p in marketplace['plugins']}=={plugin_name(c) for c in plugins}|{GUARDRAILS}
   for p in marketplace['plugins']:assert (ROOT/p['source']/'.claude-plugin/plugin.json').exists(),p['source']
-  return f'{len(plugins)} plugins match source; marketplace lists them all'
+  return f'{len(plugins)} skill plugins match source; marketplace lists them and {GUARDRAILS}'
  check('Plugins and marketplace',plugin_layout)
+ guardrails=ROOT/'plugins'/GUARDRAILS
+ def guardrail_hooks():
+  source=ROOT/'guardrails'
+  for part in ['hooks','scripts','guardrails.json']:assert tree(source/part) if (source/part).is_dir() else (source/part).read_bytes()==(guardrails/part).read_bytes(),part
+  for part in ['hooks','scripts']:assert tree(source/part)==tree(guardrails/part),f'{part} drifted from source'
+  hooks=json.loads((guardrails/'hooks/hooks.json').read_text())['hooks'];scripts=set()
+  for event,groups in hooks.items():
+   for group in groups:
+    for hook in group['hooks']:
+     if hook['type']=='command':
+      assert '"${CLAUDE_PLUGIN_ROOT}/scripts/' in hook['command'],f'{event}: unquoted or non-plugin script path'
+      name=hook['command'].split('/scripts/')[1].split('"')[0];assert (guardrails/'scripts'/name).is_file(),f'{event}: {name} missing';scripts.add(name)
+  unused={p.name for p in (guardrails/'scripts').glob('*.py')}-scripts-{'wt_hooks.py','scope.py'}
+  assert not unused,f'scripts not wired into hooks.json: {unused}'
+  assert (guardrails/'references/evidence-rules.md').read_bytes()==(ROOT/'config/evidence-rules.md').read_bytes()
+  assert '{{' not in (guardrails/'README.md').read_text()
+  managed=json.loads((ROOT/'config/managed-settings.template.json').read_text())
+  assert managed['enabledPlugins'].get(f'{GUARDRAILS}@walkthru') is True and managed.get('allowManagedHooksOnly') is True
+  return f'{len(hooks)} hook events, {len(scripts)} scripts wired, managed template force-enables {GUARDRAILS}'
+ check('Guardrail hooks',guardrail_hooks)
  def claude_validate():
   if not __import__('shutil').which('claude'):return 'claude CLI not on PATH; skipped'
   out=[]
-  for target in [ROOT,*plugins.values()]:
+  for target in [ROOT,*plugins.values(),guardrails]:
    r=subprocess.run(['claude','plugin','validate',str(target)],capture_output=True,text=True)
    assert r.returncode==0 and 'Validation passed' in r.stdout,f'{target.name}: {r.stdout}{r.stderr}'
    out.append(target.name)
@@ -77,7 +97,7 @@ def main():
    with ZipFile(package) as z:
     assert z.testzip() is None
     assert {n:z.read(n) for n in z.namelist()}=={s['name']+'/'+k:v for k,v in tree(folder).items()}
-  for c,plugin in plugins.items():
+  for plugin in [*plugins.values(),guardrails]:
    with ZipFile(release/'plugins'/f'{plugin.name}-{VERSION}.zip') as z:assert {n:z.read(n) for n in z.namelist()}=={plugin.name+'/'+k:v for k,v in tree(plugin).items()}
   with ZipFile(release/f'walkthru-all-skills-{VERSION}.zip') as z:assert {n:z.read(n) for n in z.namelist()}=={str(p.relative_to(release/'skills')):p.read_bytes() for p in (release/'skills').rglob('*.zip')}
   for group in categories:
@@ -104,10 +124,10 @@ def main():
  check('Reference preservation',preserved)
  def syntax():
   count=0
-  for base in ['skills','maintenance','plugins']:
+  for base in ['skills','maintenance','plugins','guardrails']:
    for p in (ROOT/base).rglob('*.py'):
     if included(p):ast.parse(p.read_text());count+=1
-  for p in [*(ROOT/'skills').rglob('*.json'),*(ROOT/'plugins').rglob('*.json'),ROOT/'.claude-plugin/marketplace.json']:json.loads(p.read_text())
+  for p in [*(ROOT/'skills').rglob('*.json'),*(ROOT/'plugins').rglob('*.json'),*(ROOT/'guardrails').rglob('*.json'),*(ROOT/'config').glob('*.json'),ROOT/'.claude-plugin/marketplace.json']:json.loads(p.read_text())
   return f'{count} maintained/generated Python files parsed; JSON checked, connector not authenticated'
  check('Syntax and config',syntax)
  def website():

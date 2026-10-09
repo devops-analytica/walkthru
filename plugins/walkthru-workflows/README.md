@@ -65,6 +65,10 @@ The plugin has one HTTP MCP entry: `microsoft365`, pointing to the official `htt
 
 Skills that run a bundled helper (`invoice-po-check`, `walkthru-deadline-watch`, `p6-programme-review`, `planning-weekly-report`) need `python3` on the machine or in the Claude sandbox; the helpers use the standard library only.
 
+## Guardrails (Claude Code and Cowork)
+
+Install `walkthru-guardrails@walkthru` next to this plugin. Its hooks deny connector sends and ERP writes, keep supplied originals and secrets read-only, block identity/bank details in outputs, audit every tool call and inject the Dubai date, project scope and evidence rules at session start. It needs `python3`. IT can make it mandatory with `config/managed-settings.template.json` (`allowManagedHooksOnly` + force-enabled plugin). Full list: `docs/HOOKS.md`. Hooks do not run in claude.ai chat.
+
 ## Installation smoke check (IT and trainer)
 
 Record environment, account, date, plugin version and result for each check in `evaluation/tenant-acceptance.json`:

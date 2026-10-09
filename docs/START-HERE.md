@@ -10,6 +10,8 @@ Use `catalog.json` to track title, department, source and acceptance. Update sha
 ## Install and assign
 Choose one route per person: (a) individual ZIPs in `releases/2.1.0/skills/<department>/` for training and personal claude.ai uploads; (b) Claude Code marketplace — `/plugin marketplace add <repo>` then `walkthru-general@walkthru` plus the department plugin; or (c) the all-in-one `walkthru-workflows` plugin (ZIP under `releases/2.1.0/plugins/` or via the marketplace). Never install two routes that contain the same skill. Replace previously installed matching names; do not add duplicates. Installing and connecting accounts is a separate employee/IT task.
 
+On every Claude Code or Cowork machine also install `walkthru-guardrails@walkthru`: hooks that block connector sends and ERP writes, protect supplied originals, keep identity/bank details out of reports, audit every tool call and inject date, project scope and rules at session start. IT makes it mandatory with `config/managed-settings.template.json`. Details and the full hook list: `docs/HOOKS.md`.
+
 Start employees with the slash-command routines in `config/plugin-setup.md`, or two relevant skills. Coordinators: morning brief + action tracker. Site/operations: daily report + materials tracker. Engineering/document control: engineering follow-up + correspondence. Accounts: invoice checker + action tracker. Planning: P6 review + weekly reporting. Add shared meeting minutes when useful.
 
 Use the employee's actual templates and project facts. No draft template or configuration example is an approved company policy. Follow config/plugin-setup.md for the optional connector setup; exports remain supported. Department/model/tenant acceptance is pending, even when local checks pass.
@@ -18,6 +20,7 @@ Use the employee's actual templates and project facts. No draft template or conf
 - `skills/`: maintained WalkThru source only.
 - `commands/<department>/`: starter-routine slash commands; copied into the matching plugin.
 - `evals/<skill>-<n>/`: behavioral cases (prompt + graders) for `claude plugin eval`.
+- `guardrails/`: hook scripts, `hooks/hooks.json` and default policy for the `walkthru-guardrails` plugin; tests in `maintenance/tests/test_hooks.py`.
 - `plugins/`: generated department/all-in-one plugins only.
 - `releases/`: versioned outputs, checksums and current local validation.
 - `references/`: employee profiles and licensed community/plugin snapshots; reference-only.

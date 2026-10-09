@@ -1,0 +1,38 @@
+{
+  "_comment": "WalkThru guardrail policy. ~/.claude/walkthru/guardrails.json and .claude/walkthru-guardrails.json may only tighten it (add protected paths, patterns, verbs) or change audit/watermark/context keys; writable_dirs, pii_allowed_dirs, allowed_upload_hosts and watermark_* change only through the file named by WALKTHRU_GUARDRAILS (managed settings env).",
+  "protected_dirs": ["evidence/", "inbox/", "originals/", "source-files/", "exports/"],
+  "protected_extensions": [".xer", ".xlsx", ".xlsm", ".xls", ".pdf", ".docx", ".msg", ".eml", ".dwg"],
+  "writable_dirs": ["outputs/", "drafts/", "scratch/", "tmp/", "scratchpad/"],
+  "secret_files": [".env", ".env.*", "*.pem", "*.key", "*.pfx", "id_rsa", "id_ed25519", "credentials.json", "managed-settings.json", "managed-mcp.json", "guardrails.json", "walkthru-guardrails.json", "*/.claude/settings.json", "*/.claude/settings.local.json", "*/.claude/hooks/*", "hooks.json"],
+  "pii_allowed_dirs": ["restricted/", "hr-confidential/", "finance-confidential/", "payroll/"],
+  "allowed_upload_hosts": ["graph.microsoft.com", "login.microsoftonline.com", "microsoft365.mcp.claude.com", "github.com", "api.github.com"],
+  "bash_denied_patterns": [
+    "\\brm\\s+(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r)\\b",
+    "\\bgit\\s+push\\b.*(--force\\b|-f\\b)",
+    "\\bgit\\s+reset\\s+--hard\\b",
+    "powershell(\\.exe)?\\s+.*-(e|enc|encodedcommand)\\b",
+    "\\bformat\\s+[a-z]:",
+    "\\bdel\\s+/[sq]",
+    "\\bRemove-Item\\b.*-Recurse.*-Force",
+    "\\bmkfs\\b",
+    "\\bdd\\s+if="
+  ],
+  "m365_mutating_verbs": ["send", "reply", "forward", "create", "update", "delete", "upload", "move", "post", "patch", "put", "add", "remove", "set", "share", "invite", "cancel", "accept", "decline"],
+  "mutating_verbs": ["create", "update", "delete", "post", "patch", "put", "approve", "pay", "certify", "send", "write", "upload", "remove", "submit", "execute", "insert", "modify", "release", "issue"],
+  "injection_patterns": [
+    "ignore (all )?(previous|prior|above) instructions",
+    "disregard (the )?(previous|prior|above)",
+    "you are now",
+    "system prompt",
+    "approve (this|the) (invoice|payment|variation|claim)",
+    "transfer .* to (account|iban)",
+    "do not (tell|inform) (the )?(user|manager)",
+    "forward (this|the) (email|message) to"
+  ],
+  "audit_dir": "~/.claude/walkthru-audit",
+  "watermark": "DRAFT — AI-prepared with Claude. Not reviewed, approved, sent or booked. Verify every figure against the cited source before use.",
+  "watermark_dirs": ["outputs/", "drafts/"],
+  "watermark_extensions": [".md", ".txt"],
+  "alert_webhook_env": "WALKTHRU_ALERT_WEBHOOK",
+  "project_context_files": [".claude/project-context.json", "project-context.json", "~/.claude/walkthru/project-context.json"]
+}

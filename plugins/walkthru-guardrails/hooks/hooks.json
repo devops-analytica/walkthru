@@ -1,0 +1,131 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/mcp_guard.py\"", "timeout": 10, "statusMessage": "WalkThru guardrail: connector action check" }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/protect_originals.py\"", "timeout": 10, "statusMessage": "WalkThru guardrail: protected-file check" },
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/pii_guard.py\"", "timeout": 10, "statusMessage": "WalkThru guardrail: identity/bank-detail check" }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/bash_guard.py\"", "timeout": 10, "statusMessage": "WalkThru guardrail: shell command check" },
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/protect_originals.py\"", "timeout": 10, "statusMessage": "WalkThru guardrail: protected-file check" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/audit_log.py\"", "async": true }
+        ]
+      },
+      {
+        "matcher": "Write|Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/csv_check.py\"", "timeout": 20, "statusMessage": "WalkThru guardrail: spreadsheet safety check" },
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/draft_watermark.py\"", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "Read|mcp__microsoft365__.*",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/injection_flag.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/audit_log.py\"", "async": true }
+        ]
+      },
+      {
+        "matcher": "mcp__microsoft365__.*",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/mcp_failure_help.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_context.py\"", "timeout": 15 }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/subagent_context.py\"", "timeout": 15 }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/context_reload.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/precompact_note.py\"", "timeout": 20 }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "claude-haiku-5-5",
+            "timeout": 45,
+            "prompt": "You are the WalkThru evidence gate for a UAE contractor. The hook input JSON is: $ARGUMENTS\n\nIf stop_hook_active is true, respond {\"ok\": true} immediately.\n\nOtherwise read last_assistant_message and answer {\"ok\": true} unless it clearly breaks one of these rules, in which case answer {\"ok\": false, \"reason\": \"<which rule and what to fix, one or two sentences>\"}:\n1. It states that something was sent, emailed, approved, paid, certified, booked, filed, updated in ERP/SharePoint or scheduled as a background alert. Drafting or recommending is fine; claiming the action happened is not.\n2. It names a person as owner, approver or responsible party, or gives a contractual position or deadline, without that coming from the user's input or a cited source. Hedged wording such as 'To confirm', 'assumed' or a question is fine.\n3. It presents a figure, date or status as fact without any source reference (file, sheet/row, page, message or transcript) when the message is a report, register, minutes, letter or invoice/programme check. Casual conversation, questions, plans and code do not need sources.\n4. It reports 'no incidents', 'no variance' or 'complete' where the input only said nothing was reported or data was missing.\nBe strict about rule 1 and lenient elsewhere: when unsure, answer {\"ok\": true}. Output only the JSON object."
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/notify.py\"", "timeout": 15, "async": true }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "matcher": "rate_limit|overloaded|authentication_failed|billing_error|account_on_hold|server_error|cloud_credential_error",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/stopfailure_alert.py\"", "timeout": 15, "async": true }
+        ]
+      }
+    ],
+    "ConfigChange": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/config_audit.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "Setup": [
+      {
+        "matcher": "init",
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/setup_check.py\"", "timeout": 20 }
+        ]
+      }
+    ]
+  }
+}

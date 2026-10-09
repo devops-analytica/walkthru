@@ -1,0 +1,52 @@
+{
+  "_comment": "IT template. Deploy as managed-settings.json: macOS /Library/Application Support/ClaudeCode/, Windows C:\\Program Files\\ClaudeCode\\, Linux/WSL /etc/claude-code/ (or via MDM / claude.ai server-managed settings). Remove this _comment key or keep it; unknown keys are ignored. Replace <...> placeholders.",
+  "extraKnownMarketplaces": {
+    "walkthru": {
+      "source": { "source": "github", "repo": "devops-analytica/walkthru" },
+      "autoUpdate": true
+    }
+  },
+  "strictKnownMarketplaces": [
+    { "source": "github", "repo": "devops-analytica/walkthru" },
+    { "source": "github", "repo": "anthropics/claude-plugins-official" }
+  ],
+  "enabledPlugins": {
+    "walkthru-guardrails@walkthru": true,
+    "walkthru-general@walkthru": true
+  },
+  "allowManagedHooksOnly": true,
+  "allowManagedMcpServersOnly": true,
+  "allowedMcpServers": [
+    { "serverUrl": "https://microsoft365.mcp.claude.com/*" }
+  ],
+  "availableModels": ["sonnet", "haiku"],
+  "permissions": {
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable",
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(curl * -d *)",
+      "Bash(curl * --data *)",
+      "Bash(curl * -T *)",
+      "Bash(curl * -F *)",
+      "Bash(wget --post-data *)",
+      "Bash(scp *)",
+      "Bash(rsync *)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Edit(**/evidence/**)",
+      "Edit(**/inbox/**)",
+      "Write(**/evidence/**)",
+      "Write(**/inbox/**)"
+    ]
+  },
+  "env": {
+    "WALKTHRU_GUARDRAILS": "<absolute path to the IT-controlled guardrails.json, e.g. C:\\Program Files\\ClaudeCode\\walkthru-guardrails.json>",
+    "WALKTHRU_AUDIT_DIR": "<absolute path mirrored to the central audit store, e.g. %USERPROFILE%\\OneDrive - WalkThru\\claude-audit>",
+    "WALKTHRU_ALERT_WEBHOOK": "<Teams incoming-webhook URL for IT alerts, or remove this key>"
+  }
+}

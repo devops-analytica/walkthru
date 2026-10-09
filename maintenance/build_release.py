@@ -11,6 +11,8 @@ HELPERS={'xer_check.py':['p6-programme-review','planning-weekly-report'],'operat
 MCP={'mcpServers':{'microsoft365':{'type':'http','url':'https://microsoft365.mcp.claude.com/mcp'}}}
 CATEGORY_TITLES={'general':'General and coordination','site-operations':'Site and operations','engineering':'Engineering, technical and document control','procurement':'Procurement and materials','finance-commercial':'Finance and commercial','planning':'Planning and project controls','estimation-commercial':'Estimation, tendering and contracts','hr-admin':'HR, administration and PRO'}
 ALL_PLUGIN='walkthru-workflows'
+GUARDRAILS='walkthru-guardrails'
+GUARDRAILS_DESCRIPTION='Hooks that enforce the WalkThru evidence rules around every skill: connector actions stay read-only, originals stay intact, identity and bank details stay out of reports, every tool call is audited, each session starts with date, project scope and rules. No skills; install with walkthru-general or walkthru-workflows.'
 def included(p):return p.is_file() and p.name!='.DS_Store' and '__pycache__' not in p.parts and p.suffix!='.pyc'
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def tree(p):return {str(f.relative_to(p)):f.read_bytes() for f in sorted(p.rglob('*')) if included(f)}
@@ -44,6 +46,17 @@ def write_plugin(category,skills,names):
  readme=readme.replace('{{PLUGIN}}',plugin_name(category)).replace('{{VERSION}}',VERSION).replace('{{REPO}}',MARKETPLACE_REPO).replace('{{SKILLS}}','\n'.join(f'- `{s["name"]}` — {s["title"]}' for s in skills))
  (plugin/'README.md').write_text(readme)
  return plugin
+def write_guardrails():
+ """Copy the hand-maintained guardrails plugin source, add manifest, evidence rules and rendered README."""
+ plugin=ROOT/'plugins'/GUARDRAILS
+ if plugin.exists():shutil.rmtree(plugin)
+ shutil.copytree(ROOT/'guardrails',plugin,ignore=shutil.ignore_patterns('__pycache__','*.pyc','.DS_Store'))
+ (plugin/'.claude-plugin').mkdir()
+ (plugin/'.claude-plugin/plugin.json').write_text(json.dumps({'name':GUARDRAILS,'version':VERSION,'description':GUARDRAILS_DESCRIPTION,'author':{'name':'WalkThru internal toolkit'},'keywords':['hooks','governance','audit','walkthru']},indent=2)+'\n')
+ (plugin/'references').mkdir(exist_ok=True)
+ shutil.copyfile(ROOT/'config/evidence-rules.md',plugin/'references/evidence-rules.md')
+ (plugin/'README.md').write_text((ROOT/'guardrails/README.md').read_text().replace('{{VERSION}}',VERSION).replace('{{REPO}}',MARKETPLACE_REPO))
+ return plugin
 def render_catalogue(skills,categories):
  """Regenerate index.html filter/cards and docs/SKILL-CATALOGUE.md from catalog.json; static copy stays."""
  esc=lambda s:s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
@@ -75,11 +88,12 @@ def main():
    if helper=='operation_checks.py':shutil.copyfile(ROOT/'config/operation-checks.md',names[name]/'references/operation-checks.md')
  categories=sorted({s['category'] for s in skills})
  for stale in (ROOT/'plugins').iterdir():
-  if stale.is_dir() and stale.name not in {plugin_name(c) for c in categories+['all']}:shutil.rmtree(stale)
+  if stale.is_dir() and stale.name not in {plugin_name(c) for c in categories+['all']}|{GUARDRAILS}:shutil.rmtree(stale)
  plugins={c:write_plugin(c,[s for s in skills if s['category']==c],names) for c in categories}
  plugins['all']=write_plugin('all',skills,names)
+ guardrails=write_guardrails()
  (ROOT/'.claude-plugin').mkdir(exist_ok=True)
- marketplace={'$schema':'https://anthropic.com/claude-code/marketplace.schema.json','name':'walkthru','description':'WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package.','owner':{'name':'WalkThru internal toolkit'},'metadata':{'version':VERSION},'plugins':[{'name':plugin_name(c),'source':'./plugins/'+plugin_name(c),'description':plugin_description(c,[s for s in skills if c=='all' or s['category']==c]),'version':VERSION,'category':'productivity','author':{'name':'WalkThru internal toolkit'}} for c in ['all']+categories]}
+ marketplace={'$schema':'https://anthropic.com/claude-code/marketplace.schema.json','name':'walkthru','description':'WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package, and a guardrails plugin that enforces the evidence rules with hooks.','owner':{'name':'WalkThru internal toolkit'},'metadata':{'version':VERSION},'plugins':[{'name':plugin_name(c),'source':'./plugins/'+plugin_name(c),'description':plugin_description(c,[s for s in skills if c=='all' or s['category']==c]),'version':VERSION,'category':'productivity','author':{'name':'WalkThru internal toolkit'}} for c in ['all']+categories]+[{'name':GUARDRAILS,'source':'./plugins/'+GUARDRAILS,'description':GUARDRAILS_DESCRIPTION,'version':VERSION,'category':'security','author':{'name':'WalkThru internal toolkit'}}]}
  (ROOT/'.claude-plugin/marketplace.json').write_text(json.dumps(marketplace,indent=2)+'\n')
  release=ROOT/'releases'/VERSION
  evals_records={p.name:p.read_bytes() for p in release.glob('evals*.json')} if release.exists() else {}  # keep recorded eval runs across rebuilds
@@ -93,19 +107,19 @@ def main():
  for category in categories:
   zip_files({p.name:p.read_bytes() for p in packages if p.parent.name==category},release/'bundles'/(category+'.zip'))
  zip_files({str(p.relative_to(release/'skills')):p.read_bytes() for p in packages},release/f'walkthru-all-skills-{VERSION}.zip')
- for c,plugin in plugins.items():
+ for plugin in [*plugins.values(),guardrails]:
   zip_files({plugin.name+'/'+k:v for k,v in tree(plugin).items()},release/'plugins'/f'{plugin.name}-{VERSION}.zip')
  shutil.copyfile(ROOT/'.claude-plugin/marketplace.json',release/'marketplace.json')
  artifacts=[p for p in release.rglob('*.zip') if included(p)]
- source_files=[ROOT/'catalog.json',*list((ROOT/'skills').rglob('*')),*list((ROOT/'commands').rglob('*')),*list((ROOT/'config').rglob('*')),*list((ROOT/'maintenance/lib').rglob('*')),*(list((ROOT/'evals').rglob('*')) if (ROOT/'evals').exists() else [])]
- manifest={'version':VERSION,'status':'built; see validation.json for local checks; departmental/tenant acceptance pending','plugins':{p.name:sorted(d.name for d in (p/'skills').iterdir()) for p in plugins.values()},'artifacts':{str(p.relative_to(ROOT)):digest(p) for p in sorted(artifacts)},'current_sources':{str(p.relative_to(ROOT)):digest(p) for p in sorted(source_files) if included(p) and 'results' not in p.parts}}
+ source_files=[ROOT/'catalog.json',*list((ROOT/'skills').rglob('*')),*list((ROOT/'commands').rglob('*')),*list((ROOT/'config').rglob('*')),*list((ROOT/'guardrails').rglob('*')),*list((ROOT/'maintenance/lib').rglob('*')),*(list((ROOT/'evals').rglob('*')) if (ROOT/'evals').exists() else [])]
+ manifest={'version':VERSION,'status':'built; see validation.json for local checks; departmental/tenant acceptance pending','plugins':{**{p.name:sorted(d.name for d in (p/'skills').iterdir()) for p in plugins.values()},GUARDRAILS:sorted(json.loads((guardrails/'hooks/hooks.json').read_text())['hooks'])},'artifacts':{str(p.relative_to(ROOT)):digest(p) for p in sorted(artifacts)},'current_sources':{str(p.relative_to(ROOT)):digest(p) for p in sorted(source_files) if included(p) and 'results' not in p.parts}}
  (release/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
  (release/'SHA256SUMS').write_text(''.join(f'{digest(p)}  {p.relative_to(ROOT)}\n' for p in sorted(artifacts)))
- (ROOT/'releases/CURRENT.json').write_text(json.dumps({'version':VERSION,'path':'releases/'+VERSION,'individual_skills':len(skills),'plugins':sorted(p.name for p in plugins.values()),'plugin_is_generated':True,'acceptance':'local validation separate; employee/project/tenant acceptance pending'},indent=2)+'\n')
+ (ROOT/'releases/CURRENT.json').write_text(json.dumps({'version':VERSION,'path':'releases/'+VERSION,'individual_skills':len(skills),'plugins':sorted([p.name for p in plugins.values()]+[GUARDRAILS]),'plugin_is_generated':True,'acceptance':'local validation separate; employee/project/tenant acceptance pending'},indent=2)+'\n')
  render_catalogue(skills,categories)
  for doc in [ROOT/'index.html',ROOT/'docs/SKILL-CATALOGUE.md']:
   text=doc.read_text()
   for pat,rep in [(r'releases/\d+\.\d+\.\d+/',f'releases/{VERSION}/'),(r'-\d+\.\d+\.\d+\.zip',f'-{VERSION}.zip'),(r'TOOLKIT \d+\.\d+\.\d+',f'TOOLKIT {VERSION}'),(r'Version \d+\.\d+\.\d+ ·',f'Version {VERSION} ·')]:text=re.sub(pat,rep,text)
   doc.write_text(text)
- print(f'Built {len(skills)} individual skills, {len(categories)} department bundles, all-skills bundle, {len(plugins)} plugins and marketplace.json for {VERSION}')
+ print(f'Built {len(skills)} individual skills, {len(categories)} department bundles, all-skills bundle, {len(plugins)} skill plugins, {GUARDRAILS} and marketplace.json for {VERSION}')
 if __name__=='__main__':main()
