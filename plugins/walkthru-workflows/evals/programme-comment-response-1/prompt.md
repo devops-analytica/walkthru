@@ -1,5 +1,6 @@
 ---
 max_turns: 10
+timeout_seconds: 600
 runs: 1
 allowed_tools: [Read, Glob, Grep, Skill]
 tags: [programme, programme-comment-response]
