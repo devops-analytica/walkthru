@@ -59,7 +59,7 @@ Hook 7 is a managed setting (`availableModels`, `deniedModels`), which is the su
 ## Verify
 
 ```
-python3 -m unittest maintenance/tests/test_hooks.py     # 53 script tests
+python3 -m unittest maintenance/tests/test_hooks.py     # 56 script tests
 python3 maintenance/validate_release.py                 # hook wiring, parity, claude plugin validate
 claude --init-only                                      # Setup hook prints the readiness report
 ```

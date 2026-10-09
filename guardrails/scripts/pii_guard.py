@@ -41,11 +41,12 @@ def main():
     data = wt.read_input()
     config = wt.load_config(data)
     tool_input = data.get('tool_input') or {}
-    path = tool_input.get('file_path', '')
+    path = tool_input.get('file_path') or tool_input.get('notebook_path') or ''
     if wt.path_matches(path, config.get('pii_allowed_dirs'), data.get('cwd')):
         return
-    text = tool_input.get('content') or tool_input.get('new_string') or ''
-    hits = findings(text)
+    texts = [tool_input.get('content'), tool_input.get('new_string'), tool_input.get('new_source')]
+    texts += [e.get('new_string') for e in tool_input.get('edits') or [] if isinstance(e, dict)]
+    hits = findings('\n'.join(t for t in texts if isinstance(t, str)))
     if hits:
         wt.deny(f'WalkThru guardrail: output contains {", ".join(hits)}. Do not reproduce identity or bank details in reports; refer to the record ID and keep the detail in the restricted source. Restricted folders: ' + ', '.join(config.get('pii_allowed_dirs', [])) + '.')
 
