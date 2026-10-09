@@ -42,7 +42,7 @@ def main():
     config = wt.load_config(data)
     tool_input = data.get('tool_input') or {}
     path = tool_input.get('file_path', '')
-    if wt.path_matches(path, config.get('pii_allowed_dirs')):
+    if wt.path_matches(path, config.get('pii_allowed_dirs'), data.get('cwd')):
         return
     text = tool_input.get('content') or tool_input.get('new_string') or ''
     hits = findings(text)
@@ -51,4 +51,4 @@ def main():
 
 
 if __name__ == '__main__':
-    wt.run(main)
+    wt.run(main, fail_closed=True)

@@ -59,12 +59,14 @@ Hook 7 is a managed setting (`availableModels`, `deniedModels`), which is the su
 ## Verify
 
 ```
-python3 -m unittest maintenance/tests/test_hooks.py     # 50 script tests
+python3 -m unittest maintenance/tests/test_hooks.py     # 53 script tests
 python3 maintenance/validate_release.py                 # hook wiring, parity, claude plugin validate
 claude --init-only                                      # Setup hook prints the readiness report
 ```
 
 Live checks after install: ask Claude to "send this email now" (denied with reason), to edit a file under `evidence/` (denied), to write a CSV with a cell starting `=SUM(` (blocked, rewritten), and to write "EID 784-1990-1234567-1" into a report (denied). Check `/hooks` lists 13 events under `walkthru-guardrails` and that the audit file grew.
+
+**Failure behaviour:** the four PreToolUse guards (`mcp_guard`, `protect_originals`, `bash_guard`, `pii_guard`) turn their own crash into a permission prompt rather than a silent allow; context, audit and notification hooks log to stderr and let the session continue. Override entries that are not strings or do not compile as regexes are dropped with a stderr notice. Paths are normalized against the session folder before matching, so `outputs/../evidence/x.xlsx` is still evidence.
 
 ## Known limits
 

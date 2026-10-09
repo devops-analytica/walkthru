@@ -24,7 +24,7 @@ def main():
     mark = config.get('watermark', '').strip()
     if not mark:
         return
-    stamped = [p.name for p in wt.written_files(data, tuple(config.get('watermark_extensions', []))) if wt.path_matches(p, config.get('watermark_dirs')) and stamp(p, mark)]
+    stamped = [p.name for p in wt.written_files(data, tuple(config.get('watermark_extensions', []))) if wt.path_matches(p, config.get('watermark_dirs'), data.get('cwd')) and stamp(p, mark)]
     if stamped:
         wt.context(f'WalkThru guardrail: DRAFT header added to {", ".join(stamped)}. Leave it in place until the responsible person reviews and approves the document.', 'PostToolUse')
 

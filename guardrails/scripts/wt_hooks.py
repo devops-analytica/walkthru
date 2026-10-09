@@ -5,7 +5,7 @@ or an exit code. Decision helpers below produce exactly the shapes documented at
 https://code.claude.com/docs/en/hooks. Hooks fail open on their own errors: a broken hook must never
 stop an employee from working, but it must never silently approve either, so errors go to stderr.
 """
-import fnmatch, json, os, re, sys, time
+import fnmatch, json, os, posixpath, re, sys, time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -49,16 +49,35 @@ def _load_json(path):
 
 TIGHTEN_ONLY = ('protected_dirs', 'protected_extensions', 'secret_files', 'bash_denied_patterns', 'm365_mutating_verbs', 'mutating_verbs', 'injection_patterns')
 LOCKED_ONLY = ('writable_dirs', 'pii_allowed_dirs', 'allowed_upload_hosts', 'watermark_dirs', 'watermark_extensions')
+REGEX_KEYS = ('bash_denied_patterns', 'injection_patterns')
 
 
-def _tighten(config, override):
+def _clean_list(key, value, source):
+    """Only non-empty strings survive; for regex keys only patterns that compile. Bad entries are reported, not applied."""
+    items = value if isinstance(value, list) else [value]
+    good = []
+    for item in items:
+        if not isinstance(item, str) or not item.strip():
+            print(f'walkthru-guardrails: {source}: "{key}" entry {item!r} is not a string; ignored', file=sys.stderr)
+            continue
+        if key in REGEX_KEYS:
+            try:
+                re.compile(item)
+            except re.error as exc:
+                print(f'walkthru-guardrails: {source}: "{key}" pattern {item!r} does not compile ({exc}); ignored', file=sys.stderr)
+                continue
+        good.append(item)
+    return good
+
+
+def _tighten(config, override, source='override'):
     """Apply an untrusted override: lists that restrict are unioned, lists that loosen are ignored, scalars replace."""
     out = dict(config)
     for key, value in override.items():
         if key in LOCKED_ONLY:
-            print(f'walkthru-guardrails: "{key}" can only be changed through WALKTHRU_GUARDRAILS (managed settings); override ignored', file=sys.stderr)
+            print(f'walkthru-guardrails: {source}: "{key}" can only be changed through WALKTHRU_GUARDRAILS (managed settings); ignored', file=sys.stderr)
         elif key in TIGHTEN_ONLY:
-            out[key] = list(dict.fromkeys([*(config.get(key) or []), *(value if isinstance(value, list) else [value])]))
+            out[key] = list(dict.fromkeys([*(config.get(key) or []), *_clean_list(key, value, source)]))
         elif isinstance(value, dict) and isinstance(out.get(key), dict):
             out[key] = _merge(out[key], value)
         else:
@@ -77,20 +96,28 @@ def load_config(hook_input=None):
     locked = os.environ.get('WALKTHRU_GUARDRAILS')
     if locked:
         config = _merge(config, _load_json(locked))
-    config = _tighten(config, _load_json(Path.home() / '.claude' / 'walkthru' / 'guardrails.json'))
+    config = _tighten(config, _load_json(Path.home() / '.claude' / 'walkthru' / 'guardrails.json'), 'home override')
     project = os.environ.get('CLAUDE_PROJECT_DIR') or (hook_input or {}).get('cwd')
     if project:
-        config = _tighten(config, _load_json(Path(project) / '.claude' / 'walkthru-guardrails.json'))
+        config = _tighten(config, _load_json(Path(project) / '.claude' / 'walkthru-guardrails.json'), 'project override')
+    for key in TIGHTEN_ONLY + LOCKED_ONLY:  # the plugin default and the locked file are trusted, but a typo must not disable a guard silently
+        config[key] = _clean_list(key, config.get(key) or [], 'policy')
     return config
 
 
-def norm_path(path):
-    return str(path).replace('\\', '/') if path else ''
+def norm_path(path, cwd=None):
+    """Forward slashes, `.`/`..` collapsed, and (when cwd is given) relative paths anchored to the session folder."""
+    if not path:
+        return ''
+    p = str(path).replace('\\', '/')
+    if cwd and not (p.startswith('/') or re.match(r'^[A-Za-z]:/', p)):
+        p = str(cwd).replace('\\', '/').rstrip('/') + '/' + p
+    return posixpath.normpath(p)
 
 
-def path_matches(path, patterns):
-    """True when any pattern is a directory segment of, a suffix of, or a glob match for the path."""
-    p = norm_path(path).lower()
+def path_matches(path, patterns, cwd=None):
+    """True when any pattern is a directory segment of, a suffix of, or a glob match for the normalized path."""
+    p = norm_path(path, cwd).lower()
     for pattern in patterns or []:
         pat = pattern.lower()
         if pat.endswith('/'):
@@ -189,12 +216,16 @@ def compile_patterns(patterns):
     return [re.compile(p, re.I) for p in patterns or []]
 
 
-def run(main):
-    """Run a hook body; on an unexpected error report to stderr and exit 0 (fail open, visibly)."""
+def run(main, fail_closed=False):
+    """Run a hook body. On an unexpected error: context/audit hooks report to stderr and exit 0; policy guards
+    (fail_closed=True) hand the decision to the human with a permission prompt instead of silently allowing."""
     try:
         main()
     except SystemExit:
         raise
-    except Exception as exc:  # noqa: BLE001 - a hook crash must not block the employee
-        print(f'walkthru-guardrails: {Path(sys.argv[0]).name} failed: {exc!r}', file=sys.stderr)
+    except Exception as exc:  # noqa: BLE001 - a hook crash must be visible, never a silent allow
+        name = Path(sys.argv[0]).name
+        print(f'walkthru-guardrails: {name} failed: {exc!r}', file=sys.stderr)
+        if fail_closed:
+            ask(f'WalkThru guardrail {name} could not evaluate this call ({type(exc).__name__}); confirm manually and tell IT.')
         sys.exit(0)

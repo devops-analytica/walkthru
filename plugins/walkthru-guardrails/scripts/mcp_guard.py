@@ -39,4 +39,4 @@ def main():
 
 
 if __name__ == '__main__':
-    wt.run(main)
+    wt.run(main, fail_closed=True)

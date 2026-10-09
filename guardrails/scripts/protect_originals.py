@@ -14,9 +14,9 @@ SHELL_WRITE = re.compile(r'(>{1,2}|\brm\b|\bmv\b|\bdel\b|\bsed\s+-i|\btee\b|\btr
 FILE_TOKEN = re.compile(r'[^\s"\'<>|;&]+\.[A-Za-z0-9]{2,5}')
 
 
-def verdict(path, config):
-    """Return a reason string when the path must not be written, else None."""
-    p = wt.norm_path(path)
+def verdict(path, config, cwd=None):
+    """Return a reason string when the (normalized, cwd-anchored) path must not be written, else None."""
+    p = wt.norm_path(path, cwd)
     if not p:
         return None
     if wt.path_matches(p, config.get('secret_files')):
@@ -39,17 +39,18 @@ def main():
     config = wt.load_config(data)
     tool = data.get('tool_name', '')
     tool_input = data.get('tool_input') or {}
+    cwd = data.get('cwd')
     if tool in ('Bash', 'PowerShell'):
         for token in shell_targets(tool_input.get('command', '')):
-            reason = verdict(token, config)
+            reason = verdict(token, config, cwd)
             if reason:
                 wt.deny(f'WalkThru guardrail: shell command would modify a protected file: {reason}. Leave supplied originals intact; write results to an outputs folder.')
         return
     path = tool_input.get('file_path') or tool_input.get('notebook_path') or ''
-    reason = verdict(path, config)
+    reason = verdict(path, config, cwd)
     if reason:
         wt.deny(f'WalkThru guardrail: {reason}. Leave supplied originals intact; write results to an outputs folder (CSV/Markdown/new XLSX) instead.')
 
 
 if __name__ == '__main__':
-    wt.run(main)
+    wt.run(main, fail_closed=True)
