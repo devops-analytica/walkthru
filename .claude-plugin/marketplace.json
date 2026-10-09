@@ -22,7 +22,7 @@
     {
       "name": "walkthru-engineering",
       "source": "./plugins/walkthru-engineering",
-      "description": "WalkThru Engineering and document control workflows (1 skills): Submittal, RFI and inspection follow-up. Evidence-based drafts; optional Microsoft 365 read access.",
+      "description": "WalkThru Engineering, technical and document control workflows (1 skills): Submittal, RFI and inspection follow-up. Evidence-based drafts; optional Microsoft 365 read access.",
       "version": "2.1.0",
       "category": "productivity",
       "author": {

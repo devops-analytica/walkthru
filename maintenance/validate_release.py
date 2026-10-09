@@ -19,7 +19,7 @@ def main():
  catalog=json.loads((ROOT/'catalog.json').read_text());skills=catalog['skills'];paths={s['name']:ROOT/s['source'] for s in skills}
  categories=sorted({s['category'] for s in skills});plugins={c:ROOT/'plugins'/plugin_name(c) for c in categories+['all']}
  def metadata():
-  assert len(paths)==16 and len(skills)==16
+  assert len(paths)==len(skills),'duplicate skill names'
   assert {p.parent for p in (ROOT/'skills').glob('*/*/SKILL.md')}==set(paths.values())
   for name,path in paths.items():
    text=(path/'SKILL.md').read_text();fm=text.split('---',2)[1]
@@ -32,7 +32,7 @@ def main():
    for file in path.rglob('*.md'):
     for link in re.findall(r'\]\(([^)]+)\)',file.read_text()):
      if '://' not in link and not link.startswith('#'):assert (file.parent/link.split('#')[0]).exists(),f'{file}: {link}'
-  return '16 unique current names, trigger descriptions, python3 helpers and local skill links'
+  return f'{len(skills)} unique current names, trigger descriptions, python3 helpers and local skill links'
  check('Catalogue and references',metadata)
  def commands():
   count=0
