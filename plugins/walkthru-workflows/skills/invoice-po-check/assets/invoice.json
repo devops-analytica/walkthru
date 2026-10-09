@@ -1,0 +1,61 @@
+{
+  "invoice": {
+    "number": "DEMO-INV-01",
+    "po_number": "DEMO-PO-01",
+    "vendor_id": "DEMO-V1",
+    "project_id": "DEMO-P1",
+    "currency": "AED",
+    "date": "2026-10-09",
+    "supplier_trn": "SYNTHETIC-NOT-A-REAL-TRN",
+    "subtotal": "840.00",
+    "vat": "42.00",
+    "total": "882.00",
+    "source": "synthetic invoice page 1",
+    "lines": [
+      {
+        "id": "L1",
+        "description": "Demo item",
+        "unit": "pcs",
+        "qty": "70",
+        "rate": "12",
+        "amount": "840",
+        "previous_qty": "20",
+        "delivered_qty": "80",
+        "source": "synthetic invoice page 1 line L1",
+        "delivery_source": "synthetic reconciled GRNs row L1"
+      }
+    ]
+  },
+  "po": {
+    "number": "DEMO-PO-01",
+    "vendor_id": "DEMO-V1",
+    "project_id": "DEMO-P1",
+    "currency": "AED",
+    "source": "synthetic PO page 1",
+    "lines": [
+      {
+        "id": "L1",
+        "description": "Demo item",
+        "unit": "pcs",
+        "qty": "100",
+        "rate": "10",
+        "source": "synthetic PO line L1"
+      }
+    ]
+  },
+  "history": [
+    {
+      "vendor_id": "DEMO-V1",
+      "number": "DEMO-PRIOR-01",
+      "date": "2026-10-01",
+      "total": "210"
+    }
+  ],
+  "history_complete": true,
+  "history_source": "synthetic complete ledger; previous 20 pcs reconciled",
+  "delivery_complete": true,
+  "tax_rate": ".05",
+  "tax_source": "synthetic transaction-specific treatment for this example only",
+  "tax_invoice": true,
+  "deductions_applicable": false
+}

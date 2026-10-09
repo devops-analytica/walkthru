@@ -1,0 +1,212 @@
+{
+  "version": "1.1.0",
+  "scope": "offline deterministic and structural validation; not a model or tenant acceptance test",
+  "status": "pass",
+  "checks": [
+    {
+      "check": "Custom skill metadata",
+      "status": "pass",
+      "detail": "15 skill names, descriptions and revision metadata validated"
+    },
+    {
+      "check": "Skill references",
+      "status": "pass",
+      "detail": "17 entrypoint relative references resolved"
+    },
+    {
+      "check": "Python syntax",
+      "status": "pass",
+      "detail": "56 Python files parsed; not a runtime audit of upstream scripts"
+    },
+    {
+      "check": "Canonical helper parity",
+      "status": "pass",
+      "detail": "5 standalone helper copies and plugin equivalents match canonical sources"
+    },
+    {
+      "check": "Package/source parity",
+      "status": "pass",
+      "detail": "15 upload ZIPs, generated plugin and 2 skill sharing bundles match exact source bytes"
+    },
+    {
+      "check": "Configuration structure",
+      "status": "pass",
+      "detail": "JSON valid; custom plugin has one official non-empty M365 endpoint; authentication not tested"
+    },
+    {
+      "check": "Release checksums",
+      "status": "pass",
+      "detail": "Artifact, maintained source and helper hashes match release manifest"
+    },
+    {
+      "check": "Word document integrity",
+      "status": "pass",
+      "detail": "Both modified DOCX archives and all their XML parts parse"
+    },
+    {
+      "check": "Fixture CLI outputs",
+      "status": "pass",
+      "detail": "4 synthetic fixture CLIs produced independently asserted results"
+    }
+  ],
+  "regression_tests": [
+    {
+      "test": "test_controls.DateAndVarianceTests.test_ahead_variance",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_approved_and_renewed_expiries_remain",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_approved_task_is_closed",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_behind_variance",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_date_kind_required",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_deadline_boundaries",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_invalid_date_rejected",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_lead_time_warning",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.DateAndVarianceTests.test_progress_out_of_range",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_decimal_arithmetic",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_duplicate_line_allocations_rejected",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_duplicate_requires_review",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_fixture_supported_amount",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_missing_delivery_is_not_pass",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_missing_history_is_not_pass",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_po_missing",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_previous_billing_reduces_available_delivery",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_rate_quantity_overlap_counted_once",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_tax_rate_not_assumed",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_wrong_specification_has_no_supported_total",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_wrong_vendor_has_no_supported_total",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.InvoiceTests.test_zero_rated_tax",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_both_constraints",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_calendar_conversion",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_cli_multi_project_output_and_input_unchanged",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_csv_formula_is_text",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_invalid_threshold_fails",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_lookahead_includes_in_progress_finishes",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_malformed_xer_fails",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_missing_calendar_warns",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_missing_date_disables_date_checks",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_negative_fraction_is_preserved",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_nonfinite_float_fails",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_original_duration_is_checked",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_positive_fraction_is_not_zero",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_second_project_uses_own_date",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_secondary_only",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_threshold_is_configurable",
+      "status": "pass"
+    },
+    {
+      "test": "test_controls.ScheduleTests.test_unknown_project_fails",
+      "status": "pass"
+    }
+  ],
+  "tests_run": 39,
+  "pending_external": "See acceptance-log.json and behavioral-cases.json; no model, live-project or authenticated connector pass is claimed."
+}

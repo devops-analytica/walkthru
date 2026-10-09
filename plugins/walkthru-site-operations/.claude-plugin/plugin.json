@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-site-operations",
+  "version": "2.1.0",
+  "description": "WalkThru Site and operations workflows (1 skills): Daily site report and next-day priorities. Evidence-based drafts; optional Microsoft 365 read access.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}

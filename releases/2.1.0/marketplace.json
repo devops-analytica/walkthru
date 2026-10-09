@@ -1,0 +1,83 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "walkthru",
+  "description": "WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package.",
+  "owner": {
+    "name": "WalkThru internal toolkit"
+  },
+  "metadata": {
+    "version": "2.1.0"
+  },
+  "plugins": [
+    {
+      "name": "walkthru-workflows",
+      "source": "./plugins/walkthru-workflows",
+      "description": "All 16 maintained WalkThru daily and recurring employee workflows. Evidence-based drafts, optional Microsoft 365 read access and uploaded-export fallback.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-engineering",
+      "source": "./plugins/walkthru-engineering",
+      "description": "WalkThru Engineering and document control workflows (1 skills): Submittal, RFI and inspection follow-up. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-finance-commercial",
+      "source": "./plugins/walkthru-finance-commercial",
+      "description": "WalkThru Finance and commercial workflows (2 skills): Invoice and payment-request pre-check, Payment Application Check. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-general",
+      "source": "./plugins/walkthru-general",
+      "description": "WalkThru General and coordination workflows (7 skills): Action tracker and follow-up assistant, Chat to Actions, Deadline Watch, Project correspondence assistant, Management Update, Meeting minutes and actions, Morning priorities and email triage. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-planning",
+      "source": "./plugins/walkthru-planning",
+      "description": "WalkThru Planning and project controls workflows (4 skills): P6 Schedule Health and Float Review, Planning Weekly / Monthly Report, Programme Comment Response Sheet, Project Setup Brief. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-procurement",
+      "source": "./plugins/walkthru-procurement",
+      "description": "WalkThru Procurement and materials workflows (1 skills): Materials and delivery tracker. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-site-operations",
+      "source": "./plugins/walkthru-site-operations",
+      "description": "WalkThru Site and operations workflows (1 skills): Daily site report and next-day priorities. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    }
+  ]
+}

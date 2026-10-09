@@ -1,0 +1,15 @@
+{
+  "company_entity": null,
+  "user_role": null,
+  "project_code": null,
+  "as_of": null,
+  "timezone": "Asia/Dubai",
+  "working_week": null,
+  "holidays": [],
+  "approved_template": null,
+  "status_legend": {},
+  "review_period": null,
+  "currency": null,
+  "authority_matrix": null,
+  "note": "Example only; null means unknown. Supply actual project context."
+}

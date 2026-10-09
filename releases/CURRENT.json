@@ -1,0 +1,16 @@
+{
+  "version": "2.1.0",
+  "path": "releases/2.1.0",
+  "individual_skills": 16,
+  "plugins": [
+    "walkthru-engineering",
+    "walkthru-finance-commercial",
+    "walkthru-general",
+    "walkthru-planning",
+    "walkthru-procurement",
+    "walkthru-site-operations",
+    "walkthru-workflows"
+  ],
+  "plugin_is_generated": true,
+  "acceptance": "local validation separate; employee/project/tenant acceptance pending"
+}

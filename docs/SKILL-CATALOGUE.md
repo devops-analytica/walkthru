@@ -1,0 +1,22 @@
+# Current maintained skills
+
+Edit the source listed here; install generated ZIPs, not reference snapshots. All department/model acceptance is pending.
+
+| Department | Skill | Source | Current ZIP |
+|---|---|---|---|
+| Site and operations | Daily site report and next-day priorities | [Edit source](../skills/site-operations/daily-site-report-digest/SKILL.md) | [Download](../releases/2.1.0/skills/site-operations/daily-site-report-digest.zip) |
+| Finance and commercial | Invoice and payment-request pre-check | [Edit source](../skills/finance-commercial/invoice-po-check/SKILL.md) | [Download](../releases/2.1.0/skills/finance-commercial/invoice-po-check.zip) |
+| Planning and project controls | P6 Schedule Health and Float Review | [Edit source](../skills/planning/p6-programme-review/SKILL.md) | [Download](../releases/2.1.0/skills/planning/p6-programme-review.zip) |
+| Finance and commercial | Payment Application Check | [Edit source](../skills/finance-commercial/payment-application-check/SKILL.md) | [Download](../releases/2.1.0/skills/finance-commercial/payment-application-check.zip) |
+| Planning and project controls | Planning Weekly / Monthly Report | [Edit source](../skills/planning/planning-weekly-report/SKILL.md) | [Download](../releases/2.1.0/skills/planning/planning-weekly-report.zip) |
+| Planning and project controls | Programme Comment Response Sheet | [Edit source](../skills/planning/programme-comment-response/SKILL.md) | [Download](../releases/2.1.0/skills/planning/programme-comment-response.zip) |
+| Planning and project controls | Project Setup Brief | [Edit source](../skills/planning/project-setup-brief/SKILL.md) | [Download](../releases/2.1.0/skills/planning/project-setup-brief.zip) |
+| Engineering and document control | Submittal, RFI and inspection follow-up | [Edit source](../skills/engineering/submittal-wir-tracker/SKILL.md) | [Download](../releases/2.1.0/skills/engineering/submittal-wir-tracker.zip) |
+| General and coordination | Action tracker and follow-up assistant | [Edit source](../skills/general/walkthru-action-tracker/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-action-tracker.zip) |
+| General and coordination | Chat to Actions | [Edit source](../skills/general/walkthru-chat-to-actions/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-chat-to-actions.zip) |
+| General and coordination | Deadline Watch | [Edit source](../skills/general/walkthru-deadline-watch/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-deadline-watch.zip) |
+| General and coordination | Project correspondence assistant | [Edit source](../skills/general/walkthru-letters/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-letters.zip) |
+| General and coordination | Management Update | [Edit source](../skills/general/walkthru-management-update/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-management-update.zip) |
+| Procurement and materials | Materials and delivery tracker | [Edit source](../skills/procurement/walkthru-material-delivery-tracker/SKILL.md) | [Download](../releases/2.1.0/skills/procurement/walkthru-material-delivery-tracker.zip) |
+| General and coordination | Meeting minutes and actions | [Edit source](../skills/general/walkthru-meeting-minutes/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-meeting-minutes.zip) |
+| General and coordination | Morning priorities and email triage | [Edit source](../skills/general/walkthru-morning-brief/SKILL.md) | [Download](../releases/2.1.0/skills/general/walkthru-morning-brief.zip) |

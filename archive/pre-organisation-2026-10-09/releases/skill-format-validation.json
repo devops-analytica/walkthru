@@ -1,0 +1,82 @@
+{
+  "version": "1.1.0",
+  "validator": "Codex skill-creator quick_validate.py",
+  "dependency": "PyYAML 6.0.2 in temporary target; no runtime dependency added to toolkit",
+  "results": [
+    {
+      "skill": "walkthru-action-tracker",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-chat-to-actions",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-deadline-watch",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-letters",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-management-update",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-meeting-minutes",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "walkthru-morning-brief",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "daily-site-report-digest",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "invoice-po-check",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "p6-programme-review",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "payment-application-check",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "planning-weekly-report",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "programme-comment-response",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "project-setup-brief",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    },
+    {
+      "skill": "submittal-wir-tracker",
+      "status": "pass",
+      "detail": "Skill is valid!"
+    }
+  ]
+}

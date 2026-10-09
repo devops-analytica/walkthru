@@ -1,0 +1,66 @@
+{
+  "version": "1.1.0",
+  "status": "pending external acceptance; local tests are recorded separately",
+  "checks": [
+    {
+      "id": "real-xer",
+      "reviewer_role": "Planning Manager",
+      "requirement": "Compare one real project plus a multi-project export against P6 settings, data date, float, primary/secondary constraints, look-ahead and baseline labels.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    },
+    {
+      "id": "finance-evidence",
+      "reviewer_role": "Finance/Commercial reviewer + Operations Manager",
+      "requirement": "Reconcile anonymized invoice+PO+GRNs+previous-billing ledger and one payment application; verify rates, cumulative quantities, deduction/tax bases and source references.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    },
+    {
+      "id": "expiry-register",
+      "reviewer_role": "Operations/PRO reviewer",
+      "requirement": "Check approved/renewed expiry rows, due-today and working-day contractual periods against actual register rules.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    },
+    {
+      "id": "m365-per-user",
+      "reviewer_role": "IT administrator + each pilot user",
+      "requirement": "Authenticate each user, search/read known email and SharePoint item, confirm pagination, denied-access fallback and unavailable write tools.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    },
+    {
+      "id": "plugin-install",
+      "reviewer_role": "IT administrator",
+      "requirement": "Upload generated plugin; verify discovery, no duplicate standalone skills and intended user permissions.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    },
+    {
+      "id": "behavioral-review",
+      "reviewer_role": "AI lead + department reviewers",
+      "requirement": "Run all70synthetic scenarios using deployed model/skills; attach outputs, model/date and reviewer judgments before calling behavior validated.",
+      "status": "pending",
+      "reviewer": null,
+      "date": null,
+      "evidence": [],
+      "result": null
+    }
+  ]
+}

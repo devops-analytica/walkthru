@@ -1,0 +1,6 @@
+TAX INVOICE GB-2231 - Gulf Blocks Trading LLC - TRN 100234567800003 - Date 05-Oct-2026
+To: Walk Through General Contracting LLC  Ref: LPO-4410  Project: Villa Saadiyat
+1. Solid concrete block 200mm  Qty 6,000 nos  Rate AED 3.25  Amount 19,500.00
+2. Hollow block 150mm          Qty 4,500 nos  Rate AED 2.40  Amount 10,800.00
+Subtotal 30,300.00  VAT 5% 1,515.00  Total AED 31,815.00
+Delivery notes attached: DN-881 (6,000 solid), DN-902 (4,000 hollow)

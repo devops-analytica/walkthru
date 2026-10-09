@@ -1,0 +1,85 @@
+{
+  "validator": "/Users/zafarkhan/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+  "skills": [
+    {
+      "name": "daily-site-report-digest",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "invoice-po-check",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "p6-programme-review",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "payment-application-check",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "planning-weekly-report",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "programme-comment-response",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "project-setup-brief",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "submittal-wir-tracker",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-action-tracker",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-chat-to-actions",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-deadline-watch",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-letters",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-management-update",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-material-delivery-tracker",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-meeting-minutes",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    },
+    {
+      "name": "walkthru-morning-brief",
+      "status": "passed",
+      "detail": "Skill is valid!"
+    }
+  ]
+}

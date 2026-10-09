@@ -1,0 +1,115 @@
+{
+  "version": "2.1.0",
+  "status": "passed",
+  "scope": "Offline deterministic/structural checks only; behavioral evals run separately with `claude plugin eval`",
+  "checks": [
+    {
+      "check": "Catalogue and references",
+      "status": "passed",
+      "detail": "16 unique current names, trigger descriptions, python3 helpers and local skill links"
+    },
+    {
+      "check": "Routine commands",
+      "status": "passed",
+      "detail": "5 routine commands reference existing skills"
+    },
+    {
+      "check": "Plugins and marketplace",
+      "status": "passed",
+      "detail": "7 plugins match source; marketplace lists them all"
+    },
+    {
+      "check": "claude plugin validate",
+      "status": "passed",
+      "detail": "claude plugin validate passed: WalkThru-Claude-Toolkit, walkthru-engineering, walkthru-finance-commercial, walkthru-general, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
+    },
+    {
+      "check": "Package/source parity",
+      "status": "passed",
+      "detail": "All individual ZIPs, department bundles, all-skills bundle and plugin ZIPs match source bytes"
+    },
+    {
+      "check": "Canonical helpers",
+      "status": "passed",
+      "detail": "Canonical helper copies match"
+    },
+    {
+      "check": "Current release checksums",
+      "status": "passed",
+      "detail": "Current source/artifact manifest and checksums valid"
+    },
+    {
+      "check": "Reference preservation",
+      "status": "passed",
+      "detail": "553 upstream/employee reference files byte-preserved"
+    },
+    {
+      "check": "Syntax and config",
+      "status": "passed",
+      "detail": "21 maintained/generated Python files parsed; JSON checked, connector not authenticated"
+    },
+    {
+      "check": "Catalogue links",
+      "status": "passed",
+      "detail": "Catalogue links resolve to current local sources/packages"
+    },
+    {
+      "check": "Original helper regressions",
+      "status": "passed",
+      "tests": 39,
+      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.043s\n\nOK\n"
+    },
+    {
+      "check": "Everyday invoice regressions",
+      "status": "passed",
+      "detail": [
+        {
+          "name": "Quantity and rate excess reconciled once",
+          "status": "passed"
+        },
+        {
+          "name": "Exceptions require hold rather than approval",
+          "status": "passed"
+        },
+        {
+          "name": "Complete matching material evidence remains manager review",
+          "status": "passed"
+        },
+        {
+          "name": "Missing history/delivery cannot produce a supported amount or clean review",
+          "status": "passed"
+        },
+        {
+          "name": "Prior same-vendor invoice identifier triggers exception",
+          "status": "passed"
+        },
+        {
+          "name": "Unconfirmed tax treatment stays unreviewed",
+          "status": "passed"
+        },
+        {
+          "name": "Wrong project cannot have final supported amount",
+          "status": "passed"
+        },
+        {
+          "name": "Previously booked beyond accepted delivery gives zero remaining support",
+          "status": "passed"
+        },
+        {
+          "name": "Explicit complete zero-history evidence is accepted",
+          "status": "passed"
+        },
+        {
+          "name": "CLI produces expected output without modifying input",
+          "status": "passed"
+        },
+        {
+          "name": "Malformed input exits nonzero without creating review",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "employee_model_acceptance": "pending",
+  "authenticated_connector_acceptance": "pending"
+}

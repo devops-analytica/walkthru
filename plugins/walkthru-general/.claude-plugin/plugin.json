@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-general",
+  "version": "2.1.0",
+  "description": "WalkThru General and coordination workflows (7 skills): Action tracker and follow-up assistant, Chat to Actions, Deadline Watch, Project correspondence assistant, Management Update, Meeting minutes and actions, Morning priorities and email triage. Evidence-based drafts; optional Microsoft 365 read access.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}

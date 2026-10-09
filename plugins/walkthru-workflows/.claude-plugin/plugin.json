@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-workflows",
+  "version": "2.1.0",
+  "description": "All 16 maintained WalkThru daily and recurring employee workflows. Evidence-based drafts, optional Microsoft 365 read access and uploaded-export fallback.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}

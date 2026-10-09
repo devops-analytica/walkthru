@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-procurement",
+  "version": "2.1.0",
+  "description": "WalkThru Procurement and materials workflows (1 skills): Materials and delivery tracker. Evidence-based drafts; optional Microsoft 365 read access.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}

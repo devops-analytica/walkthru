@@ -1,0 +1,25 @@
+{
+  "as_of": "2026-10-08",
+  "items": [
+    {
+      "id": "PERMIT-1",
+      "date": "2026-10-12",
+      "date_kind": "expiry",
+      "status": "Approved",
+      "lead_time_days": 10,
+      "deadline_basis": "Synthetic permit page 1"
+    },
+    {
+      "id": "TASK-1",
+      "date": "2026-10-12",
+      "date_kind": "task_due",
+      "status": "Approved"
+    },
+    {
+      "id": "GUARANTEE-1",
+      "date": null,
+      "date_kind": "expiry",
+      "status": "Issued"
+    }
+  ]
+}

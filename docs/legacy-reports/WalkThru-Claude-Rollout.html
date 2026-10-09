@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WalkThru Claude Rollout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column laid out like a drawing register; roles grouped by department, each row = role + stack | tools + tasks */
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --fg: #1b2427;
+  --muted: #5a676b;
+  --line: #d3dbda;
+  --accent: #1f5c78;
+  --accent-soft: #e2edf2;
+  --ok: #24704a;   --ok-bg: #e2f1e8;
+  --beta: #8a5a00; --beta-bg: #f7ecd4;
+  --adapt: #3d4f9a; --adapt-bg: #e5e8f6;
+  --pilot: #9a4a14; --pilot-bg: #f6e4d8;
+  --none: #9b2c2c; --none-bg: #f6e1e1;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171a; --surface: #182024; --fg: #e2e8e8; --muted: #9aa8ab; --line: #2b373b;
+    --accent: #7fb9d6; --accent-soft: #1b2f39;
+    --ok: #7fd1a3; --ok-bg: #173226; --beta: #e9c06a; --beta-bg: #362a12;
+    --adapt: #a7b4f0; --adapt-bg: #232a49; --pilot: #f0a876; --pilot-bg: #3a2416;
+    --none: #f09a9a; --none-bg: #3b1d1d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171a; --surface: #182024; --fg: #e2e8e8; --muted: #9aa8ab; --line: #2b373b;
+  --accent: #7fb9d6; --accent-soft: #1b2f39;
+  --ok: #7fd1a3; --ok-bg: #173226; --beta: #e9c06a; --beta-bg: #362a12;
+  --adapt: #a7b4f0; --adapt-bg: #232a49; --pilot: #f0a876; --pilot-bg: #3a2416;
+  --none: #f09a9a; --none-bg: #3b1d1d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 400 15px/1.6 var(--font-body);
+  padding: 40px 20px 72px;
+}
+.wrap { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 800; font-stretch: 78%; line-height: 1.05; }
+h2 { font-size: 1.55rem; font-weight: 750; font-stretch: 85%; }
+h3 { font-size: 1.12rem; font-weight: 700; font-stretch: 90%; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.label { font: 600 0.72rem/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 20px; }
+.lede { color: var(--muted); font-size: 1.05rem; }
+
+/* title block */
+header { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: end; border-bottom: 2px solid var(--fg); padding-bottom: 24px; }
+.tblock { display: grid; grid-template-columns: auto auto; gap: 4px 18px; font: 400 0.8rem/1.4 var(--font-mono); border: 1px solid var(--line); padding: 12px 14px; background: var(--surface); }
+.tblock dt { color: var(--muted); }
+.tblock dd { margin: 0; font-weight: 600; }
+.hero-text { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* snapshot */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.fact { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fact b { font-family: var(--font-display); font-stretch: 90%; font-size: 1.05rem; }
+
+/* legend + pills */
+.pill { display: inline-block; font: 600 0.68rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 7px 3px; border-radius: 3px; white-space: nowrap; vertical-align: 1px; }
+.p-ok { color: var(--ok); background: var(--ok-bg); }
+.p-beta { color: var(--beta); background: var(--beta-bg); }
+.p-adapt { color: var(--adapt); background: var(--adapt-bg); }
+.p-pilot { color: var(--pilot); background: var(--pilot-bg); }
+.p-none { color: var(--none); background: var(--none-bg); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 0.88rem; color: var(--muted); }
+.legend span { display: flex; gap: 8px; align-items: center; }
+
+/* core layer */
+.core { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.core-item { border-top: 2px solid var(--accent); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.core-item h3 { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.core-item p { font-size: 0.93rem; }
+
+/* role register */
+.dept { display: flex; flex-direction: column; }
+.dept-head { display: flex; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 2px solid var(--fg); }
+.dept-head .code { font: 600 0.8rem/1 var(--font-mono); color: var(--accent); }
+.role { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr); gap: 12px 32px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.role-id { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.stack span { font: 400 0.74rem/1 var(--font-mono); border: 1px solid var(--line); padding: 5px 7px; border-radius: 3px; color: var(--muted); background: var(--surface); }
+.role-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tools { display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem; }
+.tools div { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; }
+.tools code { font: 400 0.84rem/1.4 var(--font-mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; }
+.tasks { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.93rem; }
+.tasks li::marker { color: var(--accent); }
+.note { font-size: 0.86rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
+
+/* gaps table */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+th { font: 600 0.72rem/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+
+/* rollout */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 52px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.steps li::before { content: counter(s, decimal-leading-zero); font: 700 1.5rem/1 var(--font-display); font-stretch: 75%; color: var(--accent); }
+.steps h3 { margin-bottom: 4px; }
+.steps p { font-size: 0.93rem; }
+.who { font: 400 0.78rem/1.4 var(--font-mono); color: var(--muted); }
+
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 28px; }
+.skills div { display: flex; flex-direction: column; gap: 4px; padding: 12px 0; border-top: 1px solid var(--line); min-width: 0; }
+.skills code { font: 600 0.86rem/1.3 var(--font-mono); color: var(--accent); }
+.skills p { font-size: 0.9rem; color: var(--muted); }
+
+.sources { columns: 2 300px; column-gap: 32px; font-size: 0.85rem; margin: 0; padding-left: 18px; }
+.sources li { break-inside: avoid; margin-bottom: 6px; }
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 720px) {
+  header { grid-template-columns: 1fr; }
+  .role { grid-template-columns: 1fr; }
+  .tools div { grid-template-columns: 1fr; gap: 2px; }
+  .steps li { grid-template-columns: 40px 1fr; }
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="hero-text">
+    <span class="label">AI enablement register · UAE fit-out &amp; construction</span>
+    <h1>Claude for WalkThru Contracting, role by role</h1>
+    <p class="lede">Which Claude apps, connectors, plugins and skills fit each of the 11 roles, built around the software the team already uses: ePromis, Microsoft 365, SharePoint, AutoCAD, KREO, PlanSwift, Primavera P6 and WhatsApp.</p>
+  </div>
+  <dl class="tblock">
+    <dt>Client</dt><dd>WalkThru Contracting</dd>
+    <dt>Offices</dt><dd>Abu Dhabi · Dubai</dd>
+    <dt>Roles</dt><dd>11</dd>
+    <dt>Date</dt><dd>07 Oct 2026</dd>
+    <dt>Rev</dt><dd>A · first issue</dd>
+  </dl>
+</header>
+
+<section>
+  <span class="label">Company snapshot</span>
+  <div class="facts">
+    <div class="fact"><span class="label">Founded</span><b>2008</b><span>Over 15 years in the UAE market</span></div>
+    <div class="fact"><span class="label">Scope</span><b>Turnkey construction &amp; fit-out</b><span>Luxury residential, hospitality, commercial</span></div>
+    <div class="fact"><span class="label">Classification</span><b>Grade 3 contractor</b><span>Delivers projects across the UAE</span></div>
+    <div class="fact"><span class="label">Recent work</span><b>Solar House, Lazure, Al-Muntada (Masdar), Barfly (Hilton Palm)</b><span>High-spec, design-led projects</span></div>
+  </div>
+  <p>A design-led, high-end contractor lives on contracts, tenders, monthly billing, submittals, transmittals and schedules. Most of that work already passes through Outlook, SharePoint and Excel, so Microsoft 365 is where Claude adds value first. The construction-specific tools (ePromis, P6, AutoCAD, KREO, PlanSwift) have no official Claude connection, so they feed Claude through exports.</p>
+</section>
+
+<section>
+  <span class="label">How to read the status tags</span>
+  <div class="legend">
+    <span><i class="pill p-ok">Ready</i> Official Anthropic feature, generally available</span>
+    <span><i class="pill p-beta">Beta</i> Official, still in beta</span>
+    <span><i class="pill p-adapt">Adapt</i> Official plugin, needs customising for WalkThru</span>
+    <span><i class="pill p-pilot">Pilot</i> Community tool; IT must vet it first</span>
+    <span><i class="pill p-none">None</i> No integration exists; use exports</span>
+  </div>
+</section>
+
+<section>
+  <h2>The shared layer every employee gets</h2>
+  <p class="lede">Set these up once for the whole company. Every role below builds on them.</p>
+  <div class="core">
+    <div class="core-item">
+      <h3>Claude Team plan <i class="pill p-ok">Ready</i></h3>
+      <p>One organisation account with admin controls, shared Projects and central billing. Office add-ins and plugins need a paid plan. Check seat pricing and minimums on the <a href="https://claude.com/pricing">pricing page</a>.</p>
+    </div>
+    <div class="core-item">
+      <h3>Microsoft 365 connector <i class="pill p-ok">Ready</i></h3>
+      <p>Lets Claude search and read Outlook mail, calendar, SharePoint, OneDrive and Teams. A Microsoft Entra <b>Global Administrator</b> grants a one-time tenant consent. Write actions (drafts, uploads) need a second consent and must be switched on separately.</p>
+    </div>
+    <div class="core-item">
+      <h3>Excel, Word, PowerPoint add-ins <i class="pill p-ok">Ready</i></h3>
+      <p>Claude works inside the open workbook, document or deck. IT deploys all three from one AppSource listing in the Microsoft 365 admin center. A work or school M365 account is required.</p>
+    </div>
+    <div class="core-item">
+      <h3>Outlook add-in <i class="pill p-beta">Beta</i></h3>
+      <p>Summarise threads, draft replies and pull actions from the inbox. It has its own AppSource listing and admins deploy it separately.</p>
+    </div>
+    <div class="core-item">
+      <h3>Built-in file skills <i class="pill p-ok">Ready</i></h3>
+      <p>Claude creates and edits real <code>.xlsx</code>, <code>.docx</code>, <code>.pptx</code> and <code>.pdf</code> files in chat with no setup. It also reads scanned PDFs and drawing sheets.</p>
+    </div>
+    <div class="core-item">
+      <h3>Claude Desktop + Cowork plugins <i class="pill p-adapt">Adapt</i></h3>
+      <p>Anthropic's free, open-source <a href="https://github.com/anthropics/knowledge-work-plugins">knowledge-work plugins</a> bundle role skills and commands. They run in Claude Desktop. Their default connectors (Slack, Gmail, Notion) don't match WalkThru, so swap them for Microsoft 365 using the <code>cowork-plugin-customizer</code>.</p>
+    </div>
+  </div>
+  <p class="note">Arabic: Claude drafts and translates in Arabic and English. That covers bilingual HR letters, authority correspondence and client letters at no extra cost.</p>
+</section>
+
+<section>
+  <h2>Role register</h2>
+
+  <div class="dept">
+    <div class="dept-head"><span class="code">LDR</span><h3>Leadership</h3></div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Managing Director</h3>
+        <div class="stack"><span>Outlook</span><span>SharePoint</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Claude app + M365 connector, Outlook add-in <i class="pill p-beta">Beta</i>, PowerPoint add-in</span></div>
+          <div><span class="label">Plugins</span><span><code>enterprise-search</code> (digest, knowledge-synthesis), <code>operations</code> (status-report, risk-assessment) <i class="pill p-adapt">Adapt</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Morning digest of overnight emails and SharePoint updates across live projects.</li>
+          <li>One-page summary of a 200-page tender package before a bid/no-bid decision.</li>
+          <li>Client or board presentation built from the latest project reports.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>General Manager</h3>
+        <div class="stack"><span>Outlook</span><span>SharePoint</span><span>MS Office</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>M365 connector, Excel and Word add-ins</span></div>
+          <div><span class="label">Plugins</span><span><code>operations</code> (status-report, capacity-plan, vendor-review, process-doc), <code>productivity</code> (task-management) <i class="pill p-adapt">Adapt</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Weekly portfolio status across all projects, pulled from the reports on SharePoint.</li>
+          <li>Subcontractor and supplier performance review before awarding the next package.</li>
+          <li>Turn an informal way of working into a written SOP (for example, site handover or snagging close-out).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="dept">
+    <div class="dept-head"><span class="code">FIN</span><h3>Finance &amp; Accounts</h3></div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Chief Financial Officer</h3>
+        <div class="stack"><span>ePromis</span><span>MS Office</span><span>SharePoint</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Excel add-in on ePromis exports, PowerPoint add-in for board packs</span></div>
+          <div><span class="label">Plugins</span><span><code>finance</code> (variance-analysis, financial-statements, close-management) <i class="pill p-adapt">Adapt</i>; <code>month-end-closer</code> from the <a href="https://github.com/anthropics/financial-services-plugins">financial-services plugins</a></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Cost-to-complete and cost-vs-value commentary per project from the ePromis project cost report.</li>
+          <li>13-week cash-flow forecast in Excel tied to billing and subcontractor payment dates.</li>
+          <li>Monthly management pack: P&amp;L, WIP, receivables ageing, with written commentary.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Finance Manager</h3>
+        <div class="stack"><span>ePromis</span><span>MS Office</span><span>SharePoint</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Excel add-in, M365 connector for supplier emails</span></div>
+          <div><span class="label">Plugins</span><span><code>finance</code> (reconciliation, variance-analysis, journal-entry-prep) <i class="pill p-adapt">Adapt</i>; <code>gl-reconciler</code> agent plugin</span></div>
+        </div>
+        <ul class="tasks">
+          <li>Bank and supplier-statement reconciliations from ePromis exports, with breaks listed.</li>
+          <li>Budget-vs-actual variance by project and cost code, with explanations drafted.</li>
+          <li>VAT working-paper checks: missing TRNs, wrong rates, unmatched invoices. A qualified person files the return.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Chief Accountant</h3>
+        <div class="stack"><span>ePromis</span><span>MS Office</span><span>SharePoint</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Excel add-in, PDF reading for invoices and statements</span></div>
+          <div><span class="label">Plugins</span><span><code>finance</code> (journal-entry, close-management, audit-support, reconciliation) <i class="pill p-adapt">Adapt</i>; <code>month-end-closer</code> agent plugin</span></div>
+        </div>
+        <ul class="tasks">
+          <li>Month-end close checklist with accruals, prepayments and retention entries prepared for review.</li>
+          <li>Extract line items from supplier invoice PDFs into an ePromis-ready import sheet.</li>
+          <li>Prepare the auditor's request list and supporting schedules.</li>
+        </ul>
+        <p class="note">Skip the plugin's <code>sox-testing</code> skill. It covers US listed-company controls.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dept">
+    <div class="dept-head"><span class="code">COM</span><h3>Commercial</h3></div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Contracts / Commercial &amp; Estimation Manager</h3>
+        <div class="stack"><span>AutoCAD</span><span>KREO</span><span>PlanSwift</span><span>ePromis</span><span>SharePoint</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>PDF reading for contracts and tender docs, Excel add-in for BOQs and payment applications</span></div>
+          <div><span class="label">Plugins</span><span><code>legal</code> (review-contract, legal-risk-assessment) as the base for a custom construction contract skill <i class="pill p-adapt">Adapt</i>; <code>small-business</code> (proposal-builder) for tender narratives</span></div>
+        </div>
+        <ul class="tasks">
+          <li>Clause-by-clause risk register for a main contract or subcontract: payment terms, retention, LDs, EOT, variations, back-to-back gaps.</li>
+          <li>Check KREO / PlanSwift quantity exports against the tender BOQ and flag missing or mismatched items.</li>
+          <li>Monthly interim payment application: reconcile measured work, variations and retention, and draft the cover letter.</li>
+          <li>Draft variation notices and claim letters with the correct contract clause references.</li>
+        </ul>
+        <p class="note">KREO and PlanSwift stay the tools of record for take-offs. Claude reviews their exports and can read PDF drawings to cross-check, but it does not replace measurement.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dept">
+    <div class="dept-head"><span class="code">TEC</span><h3>Technical, Planning &amp; Projects</h3></div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Technical Manager</h3>
+        <div class="stack"><span>AutoCAD</span><span>SharePoint</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Claude reads drawing PDFs, specs and datasheets; Word add-in for RFIs and submittals</span></div>
+          <div><span class="label">Plugins</span><span><code>operations</code> (vendor-review, risk-assessment) <i class="pill p-adapt">Adapt</i>; DWG read-only server <i class="pill p-pilot">Pilot</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Check a material submittal against the specification section and list every non-compliance.</li>
+          <li>Comparison matrix of three suppliers' products: specs, lead time, warranty, cost.</li>
+          <li>Draft technical queries (RFIs) to the consultant from site photos and marked-up drawings.</li>
+        </ul>
+        <p class="note">Export AutoCAD sheets to PDF for Claude. The community AutoCAD server only draws through Windows COM, so it adds little for design coordination.</p>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Planning Manager</h3>
+        <div class="stack"><span>Primavera P6</span><span>AutoCAD</span><span>MS Office</span><span>SharePoint</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Excel add-in on P6 activity exports, PowerPoint for progress decks</span></div>
+          <div><span class="label">Plugins</span><span><code>data</code> (analyze, data-visualization, validate-data) <i class="pill p-adapt">Adapt</i>; <code>p6xer</code> local server for XER files <i class="pill p-pilot">Pilot</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Three-week look-ahead per trade from the P6 export, formatted for the site team.</li>
+          <li>Schedule health check: open ends, negative float, hard constraints, long durations.</li>
+          <li>Delay narrative and EOT support, linking correspondence on SharePoint to affected activities.</li>
+        </ul>
+        <p class="note">Avoid hosted P6 tools such as <code>cpp-cpm-engine</code> unless approved. They send schedule data to a third-party server.</p>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Projects Coordinator</h3>
+        <div class="stack"><span>AutoCAD</span><span>SharePoint</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Outlook add-in <i class="pill p-beta">Beta</i>, Word add-in, M365 connector for calendars</span></div>
+          <div><span class="label">Plugins</span><span><code>productivity</code> (task-management, memory-management), <code>operations</code> (status-report) <i class="pill p-adapt">Adapt</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Minutes of meeting from rough notes, with an action list by owner and due date.</li>
+          <li>Weekly progress report assembled from emails, the schedule and site updates.</li>
+          <li>Paste an exported WhatsApp site-group chat and get decisions, open issues and actions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="dept">
+    <div class="dept-head"><span class="code">SUP</span><h3>Support Functions</h3></div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>HR &amp; Administration Manager</h3>
+        <div class="stack"><span>ePromis</span><span>MS Office</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>Word add-in for letters, Excel add-in on ePromis HR exports</span></div>
+          <div><span class="label">Plugins</span><span><code>human-resources</code> (draft-offer, onboarding, policy-lookup, people-report, performance-review) <i class="pill p-adapt">Adapt</i>; <code>small-business</code> (job-post-builder, hiring-screener)</span></div>
+        </div>
+        <ul class="tasks">
+          <li>Offer letters and HR notices in English and Arabic from a standard template.</li>
+          <li>Tracker of visa, Emirates ID, labour card and trade-licence expiries from an ePromis export.</li>
+          <li>Answer staff policy questions from the company handbook loaded into a Claude Project. Confirm labour-law points against MOHRE guidance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="role-id">
+        <h3>Senior Document Controller</h3>
+        <div class="stack"><span>SharePoint</span><span>MS Office</span><span>Email</span><span>WhatsApp</span></div>
+      </div>
+      <div class="role-body">
+        <div class="tools">
+          <div><span class="label">Use</span><span>M365 connector (SharePoint search; write tools if enabled), Excel add-in for registers</span></div>
+          <div><span class="label">Plugins</span><span><code>enterprise-search</code> (search, source-management), <code>operations</code> (process-doc) <i class="pill p-adapt">Adapt</i></span></div>
+        </div>
+        <ul class="tasks">
+          <li>Check the drawing and document register against SharePoint folders: missing revisions, wrong numbering, superseded files still live.</li>
+          <li>Log incoming consultant correspondence with a summary, reference number and required response date.</li>
+          <li>Prepare transmittals and submittal cover sheets in the company format.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Gaps: software with no Claude integration</h2>
+  <p class="lede">These tools have no official connector. The workaround is the same for each: export to Excel or PDF, then work with Claude on the file.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Software</th><th>Status</th><th>What works today</th><th>Route to more</th></tr></thead>
+      <tbody>
+        <tr><td>ePromis ERP</td><td><i class="pill p-none">None</i></td><td>Export reports (cost, AP/AR, payroll, HR) to Excel and use the Excel add-in.</td><td>Ask ePromis MEA whether they offer an API. With one, a custom connector could be built.</td></tr>
+        <tr><td>WhatsApp</td><td><i class="pill p-none">None</i></td><td>Export a chat or paste messages into Claude.</td><td>Third-party bridges (Wati, EZContact) use the WhatsApp Business API only. They cannot read personal or group chats and they route data through another vendor.</td></tr>
+        <tr><td>KREO · PlanSwift</td><td><i class="pill p-none">None</i></td><td>Export quantities to Excel; Claude checks them against the BOQ.</td><td>None found.</td></tr>
+        <tr><td>AutoCAD</td><td><i class="pill p-pilot">Pilot</i></td><td>Plot to PDF; Claude reads drawings, title blocks and schedules.</td><td>Community DWG read-only server (LibreDWG). Needs a local install and IT review.</td></tr>
+        <tr><td>Primavera P6</td><td><i class="pill p-pilot">Pilot</i></td><td>Export activities to Excel, or share the XER.</td><td>Community <code>p6xer</code> server runs locally on XER files. Needs IT review.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Custom skills worth building</h2>
+  <p class="lede">The official plugins are generic. These WalkThru-specific skills would carry the most weight. Build them with Anthropic's skill-creator and share them across the organisation.</p>
+  <div class="skills">
+    <div><code>construction-contract-review</code><p>Risk checklist for FIDIC-style and bespoke UAE contracts and subcontracts: payment, retention, LDs, EOT, variations, termination.</p></div>
+    <div><code>payment-application-check</code><p>Monthly IPA reconciliation: measured work, approved and pending variations, retention, advance recovery.</p></div>
+    <div><code>tender-bid-summary</code><p>Bid/no-bid brief from tender documents: scope, programme, bonds, insurances, key risks.</p></div>
+    <div><code>doc-control-standards</code><p>WalkThru numbering rules, transmittal format and register checks.</p></div>
+    <div><code>site-reporting</code><p>Company templates for MOM, weekly progress reports and look-aheads.</p></div>
+    <div><code>bilingual-letters</code><p>English/Arabic letterhead templates for HR, authorities and clients.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Rollout order</h2>
+  <ol class="steps">
+    <li><div><h3>Choose the plan and seats</h3><p>Confirm a company-managed plan and seat count with MD/GM/IT for the pilot; plan availability must be checked before purchase. Set up the organisation and invite users.</p><span class="who">Owner: MD / GM, with IT</span></div></li>
+    <li><div><h3>Grant Microsoft 365 consent</h3><p>The Entra Global Administrator approves the connector for the tenant. Start with read access; enable write tools later if the document controller needs them.</p><span class="who">Owner: IT / M365 admin</span></div></li>
+    <li><div><h3>Deploy the Office add-ins</h3><p>Push Excel, Word and PowerPoint from the Microsoft 365 admin center. Add Outlook (beta) for leadership and coordinators first.</p><span class="who">Owner: IT / M365 admin</span></div></li>
+    <li><div><h3>Install Desktop and the role plugins</h3><p>Finance, legal, HR, operations, productivity, enterprise-search, data. Swap their connectors to Microsoft 365 and remove skills that don't apply.</p><span class="who">Owner: IT, with each department head</span></div></li>
+    <li><div><h3>Build the custom construction skills</h3><p>Start with contract review and payment applications. Those two save the most hours.</p><span class="who">Owner: Commercial Manager, with an AI lead</span></div></li>
+    <li><div><h3>Pilot the community tools (optional)</h3><p>DWG reader and p6xer on one test machine, after IT review. Keep data on local machines.</p><span class="who">Owner: IT, Planning and Technical Managers</span></div></li>
+  </ol>
+  <p class="note">Ground rules: staff use company accounts only, never personal ones, for client or project data. A person checks every figure, clause reference and legal point before it leaves the company.</p>
+</section>
+
+<section>
+  <span class="label">Sources</span>
+  <ol class="sources">
+    <li><a href="https://architizer.com/firms/walkthru-contracting/">WalkThru Contracting, Architizer profile</a></li>
+    <li><a href="https://support.claude.com/en/articles/12542951-set-up-the-microsoft-365-connector">Set up the Microsoft 365 connector</a></li>
+    <li><a href="https://support.claude.com/en/articles/12684923-microsoft-365-connector-security-guide">Microsoft 365 connector security guide</a></li>
+    <li><a href="https://claude.com/claude-for-microsoft-365">Claude for Microsoft 365</a></li>
+    <li><a href="https://claude.com/blog/collaborate-with-claude-across-excel-powerpoint-word-and-outlook">Claude across Excel, PowerPoint, Word and Outlook</a></li>
+    <li><a href="https://support.claude.com/en/articles/12650343-use-claude-for-excel">Use Claude for Excel</a></li>
+    <li><a href="https://support.claude.com/en/articles/14855664-use-claude-for-outlook">Use Claude for Outlook</a></li>
+    <li><a href="https://claude.com/pricing">Claude pricing</a></li>
+    <li><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview">Agent Skills overview</a></li>
+    <li><a href="https://github.com/anthropics/knowledge-work-plugins">anthropics/knowledge-work-plugins</a></li>
+    <li><a href="https://github.com/anthropics/financial-services-plugins">anthropics/financial-services-plugins</a></li>
+    <li><a href="https://the-decoder.com/anthropics-cowork-gets-plugins-that-turn-claude-into-a-specialized-assistant-for-knowledge-workers/">Cowork plugins overview, The Decoder</a></li>
+    <li><a href="https://meconstructionnews.com/26537/ngcg-implements-construction-specific-epromis-erp-software">ePromis construction ERP, ME Construction News</a></li>
+    <li><a href="https://claudemarketplaces.com/mcp/osama-ata/p6xer-mcp-server">p6xer MCP server</a></li>
+    <li><a href="https://www.getdrio.com/mcp/io-github-danafitkowski-cpp-cpm-engine">cpp-cpm-engine (hosted P6 MCP)</a></li>
+    <li><a href="https://claudemarketplaces.com/mcp/dimitrovakulenko/dwg-mcp-server">DWG MCP server</a></li>
+    <li><a href="https://glama.ai/mcp/servers/@Porta048/AutoCad-MCP">AutoCAD MCP server</a></li>
+    <li><a href="https://ezcontact.ai/en/blog/2026-08-12-can-claude-read-send-whatsapp-messages-2026">Claude and WhatsApp, EZContact</a></li>
+    <li><a href="https://www.wati.io/geo/a-practical-mcp-choice-for-whatsapp-business-in-claude-and-cha">Wati WhatsApp MCP</a></li>
+  </ol>
+</section>
+
+<footer>Prepared 07 Oct 2026 from public sources. Plan features and beta status change often. Confirm on the linked Anthropic pages before purchase.</footer>
+
+</div>

@@ -1,0 +1,5 @@
+LOCAL PURCHASE ORDER LPO-4410 - Walk Through General Contracting LLC - Project: Villa Saadiyat (VS-02) - Date 15-Sep-2026
+Supplier: Gulf Blocks Trading LLC, TRN 100234567800003
+1. Solid concrete block 200mm  Qty 6,000 nos  Rate AED 3.10  Total 18,600.00
+2. Hollow block 150mm          Qty 4,000 nos  Rate AED 2.40  Total  9,600.00
+Subtotal 28,200.00  VAT 5% 1,410.00  Total 29,610.00

@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "scope": "Offline structure, packaging and deterministic material-invoice helper only",
+  "skills": [
+    {
+      "skill": "walkthru-morning-brief",
+      "status": "passed",
+      "files": 6,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "walkthru-action-tracker",
+      "status": "passed",
+      "files": 7,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "walkthru-meeting-minutes",
+      "status": "passed",
+      "files": 6,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "walkthru-letters",
+      "status": "passed",
+      "files": 6,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "daily-site-report-digest",
+      "status": "passed",
+      "files": 7,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "submittal-wir-tracker",
+      "status": "passed",
+      "files": 6,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "walkthru-material-delivery-tracker",
+      "status": "passed",
+      "files": 6,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    },
+    {
+      "skill": "invoice-po-check",
+      "status": "passed",
+      "files": 10,
+      "checks": [
+        "frontmatter/name/description",
+        "local links",
+        "assets and practice cases",
+        "context JSON",
+        "Python syntax where applicable",
+        "ZIP byte parity/integrity"
+      ]
+    }
+  ],
+  "invoice_regressions": [
+    {
+      "name": "Quantity and rate excess reconciled once",
+      "status": "passed"
+    },
+    {
+      "name": "Exceptions require hold rather than approval",
+      "status": "passed"
+    },
+    {
+      "name": "Complete matching material evidence remains manager review",
+      "status": "passed"
+    },
+    {
+      "name": "Missing history/delivery cannot produce a supported amount or clean review",
+      "status": "passed"
+    },
+    {
+      "name": "Prior same-vendor invoice identifier triggers exception",
+      "status": "passed"
+    },
+    {
+      "name": "Unconfirmed tax treatment stays unreviewed",
+      "status": "passed"
+    },
+    {
+      "name": "Wrong project cannot have final supported amount",
+      "status": "passed"
+    },
+    {
+      "name": "Previously booked beyond accepted delivery gives zero remaining support",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit complete zero-history evidence is accepted",
+      "status": "passed"
+    },
+    {
+      "name": "CLI produces expected output without modifying input",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed input exits nonzero without creating review",
+      "status": "passed"
+    }
+  ],
+  "model_behavioral_cases": {
+    "total": 16,
+    "status": "pending; not executed"
+  },
+  "real_project_acceptance": "pending departmental review",
+  "live_integrations": "not configured or tested"
+}

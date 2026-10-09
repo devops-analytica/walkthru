@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "project_id": null,
+  "project_name": null,
+  "approved_aliases": [],
+  "as_of_date": null,
+  "timezone": "Asia/Dubai",
+  "report_period": {
+    "start": null,
+    "end": null
+  },
+  "data_cutoff": null,
+  "project_calendar": {
+    "working_days": [],
+    "holidays": [],
+    "hours_per_day": null
+  },
+  "p6": {
+    "critical_float_days": null,
+    "near_critical_days": 10,
+    "lookahead_calendar_days": 21,
+    "approved_baseline_reference": null
+  },
+  "review_periods": {
+    "submittal_days": null,
+    "submittal_day_basis": null,
+    "wir_days": null,
+    "wir_day_basis": null
+  },
+  "financial": {
+    "currency": "AED",
+    "tax_rate": null,
+    "taxable_base_rule": null,
+    "retention_rate": null,
+    "retention_cap": null,
+    "advance_recovery_rule": null,
+    "rounding_policy": null
+  },
+  "owners": {
+    "project_manager": null,
+    "planning_reviewer": null,
+    "commercial_reviewer": null
+  },
+  "approved_templates": {
+    "weekly_report": null,
+    "minutes": null,
+    "letter": null,
+    "payment_application": null
+  },
+  "register_rules": {
+    "date_kind": null,
+    "status_legend": {},
+    "expiry_terminal_statuses": [
+      "cancelled",
+      "closed"
+    ],
+    "lead_time_days": null
+  }
+}

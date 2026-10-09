@@ -1,0 +1,57 @@
+{
+  "pack": "WalkThru Everyday Skills",
+  "version": "1.0.0",
+  "created": "2026-10-09",
+  "scope": "First eight workflows from the recommended daily-work batch",
+  "skills": [
+    {
+      "name": "walkthru-morning-brief",
+      "title": "Morning priorities and email triage",
+      "source": "general/walkthru-morning-brief",
+      "description": "Sort supplied emails or an authorized inbox into project priorities, replies and FYI. Use for morning briefs and email triage."
+    },
+    {
+      "name": "walkthru-action-tracker",
+      "title": "Action tracker and follow-up assistant",
+      "source": "general/walkthru-action-tracker",
+      "description": "Create or update an action register from project records, with overdue items, change history and draft follow-ups."
+    },
+    {
+      "name": "walkthru-meeting-minutes",
+      "title": "Meeting minutes and actions",
+      "source": "general/walkthru-meeting-minutes",
+      "description": "Draft project meeting minutes from notes or transcripts, preserving decisions, attributed commitments and action ownership."
+    },
+    {
+      "name": "walkthru-letters",
+      "title": "Project correspondence assistant",
+      "source": "general/walkthru-letters",
+      "description": "Draft project emails and letters using supplied facts, company templates and confirmed entities, in English, Arabic or both."
+    },
+    {
+      "name": "daily-site-report-digest",
+      "title": "Daily site report and next-day priorities",
+      "source": "group-4/daily-site-report-digest",
+      "description": "Draft a daily site report or consolidate site updates into an evidence-based exceptions digest and next-day needs."
+    },
+    {
+      "name": "submittal-wir-tracker",
+      "title": "Submittal, RFI and inspection follow-up",
+      "source": "group-4/submittal-wir-tracker",
+      "description": "Review engineering and inspection registers for pending actions, confirmed overdue reviews and blockers to upcoming site work."
+    },
+    {
+      "name": "walkthru-material-delivery-tracker",
+      "title": "Materials and delivery tracker",
+      "source": "new",
+      "description": "Track material requirements, procurement stages and accepted deliveries against site need dates; draft supplier follow-ups and flag shortages."
+    },
+    {
+      "name": "invoice-po-check",
+      "title": "Invoice and payment-request pre-check",
+      "source": "group-4/invoice-po-check",
+      "description": "Compare invoices and payment-request evidence with POs, accepted deliveries and billing history; report discrepancies and missing checks before manager review."
+    }
+  ],
+  "status": "Built; automated validation to be recorded separately. Employee/department acceptance pending."
+}

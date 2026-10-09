@@ -1,0 +1,11 @@
+ERMHDR	26.0
+%T	PROJECT
+%F	proj_id	proj_short_name	last_recalc_date
+%R	P1	First	2026-10-01
+%R	P2	Second	2026-10-20
+%T	CALENDAR
+%F	clndr_id	day_hr_cnt
+%R	C1	8
+%T	TASK
+%F	task_id	proj_id	clndr_id	task_code	task_name	task_type	status_code	total_float_hr_cnt	target_drtn_hr_cnt	remain_drtn_hr_cnt	early_start_date	early_end_date	target_end_date
+%R	1	P2	C1	A1	Work	TT_Task	TK_NotStart	8	400	8	2026-10-15	2026-10-16	2026-10-16

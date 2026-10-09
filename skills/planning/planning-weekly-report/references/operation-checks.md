@@ -1,0 +1,11 @@
+# Operation-check helper input
+
+The helper accepts normalized JSON, not PDFs or spreadsheets. Verify extraction and attach source references first. Run `python3 scripts/operation_checks.py <invoice|deadlines|variance> input.json --out result.json`. Input is never overwritten; output is an explicit path. Errors exit non-zero.
+
+Variance: `{"planned":60,"actual":55,"source":"progress.xlsx / Sheet1 row 12"}`. Percentages are 0–100; result is actual−planned in percentage points.
+
+Deadlines: `{"as_of":"2026-10-08","items":[{"id":"P-1","date":"2026-10-12","date_kind":"expiry","status":"Approved","lead_time_days":10,"deadline_basis":"permit.pdf page 1"}]}`. Date kinds: expiry, task_due, review_due. Buckets use calendar days. Approved/Renewed expiry rows remain active. Missing dates are shown; invalid dates fail.
+
+Material invoice: keys `invoice`, `po`, `history`, `history_complete`, `history_source`, `delivery_complete`, `tax_rate`, `tax_source`, `tax_invoice`, `deductions_applicable`. tax_rate is a decimal fraction and must be confirmed, not assumed. invoice: number, po_number, vendor_id, project_id, currency, date, supplier_trn when applicable, subtotal, vat, total, source, lines. po: number, vendor_id, project_id, currency, source, lines. Lines: id, description, unit, qty, rate, amount (invoice), source; invoice lines also have previous_qty, cumulative accepted delivered_qty, delivery_source. PO IDs are allocation keys, not row positions.
+
+`history_complete:true` requires a supplied full ledger list, even when empty; the helper trusts this normalization and does not independently prove coverage. History entries: vendor_id, number, date, total. Previous quantities must be reconciled to the ledger. `delivery_complete:true` requires cumulative accepted deliveries, reconciled with returns. Missing history/delivery evidence means Not checked and no final supported total. Deductions marked applicable remain Not checked until a separate contract reconciliation; this helper never certifies subcontract work. Monetary arithmetic uses Decimal and a stated two-decimal ROUND_HALF_UP default: adapt normalization/calculation if the confirmed transaction policy differs. Review descriptions/units and project aliases from documents, not just text similarity.
