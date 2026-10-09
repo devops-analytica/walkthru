@@ -3,7 +3,7 @@
 Open `../index.html` for the searchable skill catalogue, role filters and current download links.
 
 ## One current source per skill
-Edit only `skills/<department>/<skill-name>/`. There are 16 unique WalkThru skills: seven newer everyday drafts replace their earlier names, one new materials skill is added, and eight other maintained workflows are retained. Department folders are general, site-operations, engineering, procurement, finance-commercial and planning.
+Edit only `skills/<department>/<skill-name>/`. There are 29 unique WalkThru skills across eight department folders: general, site-operations, engineering, procurement, finance-commercial, planning, estimation-commercial and hr-admin. The 13 skills added on 09-Oct-2026 were derived from the employee role profiles in `references/employee-profiles/` (estimation, technical review, finance reporting, HR/PRO).
 
 Use `catalog.json` to track title, department, source and acceptance. Update shared evidence/settings in `config/`; canonical helpers in `maintenance/lib/`. Run `python3 maintenance/build_release.py`, then `python3 maintenance/validate_release.py`, then `claude plugin eval ./plugins/walkthru-workflows --trust-plugin --ablation none --runs 1` and record the result in `releases/<version>/`. Never edit generated plugin/ZIP copies. Both run offline; no live account actions occur.
 

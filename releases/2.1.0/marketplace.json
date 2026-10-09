@@ -12,7 +12,7 @@
     {
       "name": "walkthru-workflows",
       "source": "./plugins/walkthru-workflows",
-      "description": "All 16 maintained WalkThru daily and recurring employee workflows. Evidence-based drafts, optional Microsoft 365 read access and uploaded-export fallback.",
+      "description": "All 29 maintained WalkThru daily and recurring employee workflows. Evidence-based drafts, optional Microsoft 365 read access and uploaded-export fallback.",
       "version": "2.1.0",
       "category": "productivity",
       "author": {
@@ -22,7 +22,17 @@
     {
       "name": "walkthru-engineering",
       "source": "./plugins/walkthru-engineering",
-      "description": "WalkThru Engineering, technical and document control workflows (1 skills): Submittal, RFI and inspection follow-up. Evidence-based drafts; optional Microsoft 365 read access.",
+      "description": "WalkThru Engineering, technical and document control workflows (4 skills): Submittal, RFI and inspection follow-up, Shop drawing and submittal review, Consultant comment evaluation, Method statement draft. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-estimation-commercial",
+      "source": "./plugins/walkthru-estimation-commercial",
+      "description": "WalkThru Estimation, tendering and contracts workflows (4 skills): Supplier and subcontractor quotation comparison, BOQ and specification check, Tender register and weekly pipeline, Variation (VO/VR) register. Evidence-based drafts; optional Microsoft 365 read access.",
       "version": "2.1.0",
       "category": "productivity",
       "author": {
@@ -32,7 +42,7 @@
     {
       "name": "walkthru-finance-commercial",
       "source": "./plugins/walkthru-finance-commercial",
-      "description": "WalkThru Finance and commercial workflows (2 skills): Invoice and payment-request pre-check, Payment Application Check. Evidence-based drafts; optional Microsoft 365 read access.",
+      "description": "WalkThru Finance and commercial workflows (5 skills): Invoice and payment-request pre-check, Payment Application Check, Monthly owners' report, Daily cash position reconciliation, AR / AP aging review. Evidence-based drafts; optional Microsoft 365 read access.",
       "version": "2.1.0",
       "category": "productivity",
       "author": {
@@ -43,6 +53,16 @@
       "name": "walkthru-general",
       "source": "./plugins/walkthru-general",
       "description": "WalkThru General and coordination workflows (7 skills): Action tracker and follow-up assistant, Chat to Actions, Deadline Watch, Project correspondence assistant, Management Update, Meeting minutes and actions, Morning priorities and email triage. Evidence-based drafts; optional Microsoft 365 read access.",
+      "version": "2.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "WalkThru internal toolkit"
+      }
+    },
+    {
+      "name": "walkthru-hr-admin",
+      "source": "./plugins/walkthru-hr-admin",
+      "description": "WalkThru HR, administration and PRO workflows (3 skills): Permit and visa status tracker, Attendance and overtime check, MOHRE renewal batch. Evidence-based drafts; optional Microsoft 365 read access.",
       "version": "2.1.0",
       "category": "productivity",
       "author": {

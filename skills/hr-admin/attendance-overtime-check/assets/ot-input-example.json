@@ -1,0 +1,13 @@
+{
+  "as_of": "2026-10-09",
+  "daily_limit_hours": 2,
+  "weekly_limit_hours": 6,
+  "week_start": 5,
+  "limit_source": "EXAMPLE ONLY - not a WalkThru or legal limit; use the figure supplied in project context",
+  "records": [
+    {"employee": "Sample Worker A", "project": "P-A", "date": "2026-10-05", "ot_hours": 3, "source": "example.csv row 2"},
+    {"employee": "Sample Worker A", "project": "P-A", "date": "2026-10-06", "ot_hours": 2, "source": "example.csv row 3"},
+    {"employee": "Sample Worker A", "project": "P-A", "date": "2026-10-07", "ot_hours": 2, "source": "example.csv row 4"},
+    {"employee": "Sample Worker B", "project": "P-B", "date": "2026-10-05", "ot_hours": 1, "source": "example.csv row 5"}
+  ]
+}

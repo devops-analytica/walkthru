@@ -1,0 +1,2 @@
+project,vr_vo_no,type,instruction_ref,instruction_date,issuer,scope,status,status_evidence,claimed_amount,approved_amount,currency,vat_basis,time_impact,eot_notice_ref,submitted_date,source,note
+Example project,VR-001 (example),VR,Consultant instruction CI-12,2026-09-15,Consultant,Additional glazing to lobby,Submitted,letter ref to confirm,125000.00,,AED,excl,Unknown,,2026-09-22,email 2026-09-15,Example row; delete

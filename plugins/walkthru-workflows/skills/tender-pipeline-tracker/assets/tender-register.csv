@@ -1,0 +1,2 @@
+tender_id,tender_name,client,emirate,received_date,estimator,site_visit_date,clarification_deadline,submission_date,submission_time,status,estimated_value_aed,forecast_flag,source,note
+EXAMPLE-001,Example villa package,Example client,Dubai,2026-10-01,To confirm,2026-10-12,2026-10-16,2026-10-21,12:00,Assigned,approx 35000000,No,email 2026-10-01,Example row; delete

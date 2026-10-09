@@ -1,0 +1,2 @@
+package,item_ref,description,unit,qty,bidder,quoted_unit,quoted_qty,rate,amount,currency,vat_stated,scope_status,spec_compliance,source,note
+Example: Waterproofing,BOQ-3.2,Bituminous membrane to roof,m2,850,Bidder A,m2,850,42.00,35700.00,AED,excl,Included,Not verified,quote-A.pdf p2 row 4,Datasheet not attached

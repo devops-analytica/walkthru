@@ -2,6 +2,9 @@
 
 Skills in this plugin:
 - `submittal-wir-tracker` — Submittal, RFI and inspection follow-up
+- `shop-drawing-review` — Shop drawing and submittal review
+- `consultant-comment-evaluation` — Consultant comment evaluation
+- `method-statement-draft` — Method statement draft
 
 The toolkit ships one plugin per department plus `walkthru-general` (skills every role uses) and `walkthru-workflows` (everything in one package). Install **either** `walkthru-workflows` **or** `walkthru-general` + your department plugin — not both, or the same skills are discoverable twice. Standalone skill ZIPs (`releases/<version>/skills/`) are for training and claude.ai personal uploads; do not mix them with a plugin install of the same skills.
 
@@ -59,6 +62,10 @@ Sources checked 08 Oct 2026:
 - Hosam (planning): `/walkthru-general:morning` daily; `/walkthru-planning:planning-week` weekly.
 - Menna (role to confirm): `/walkthru-general:morning` daily + Chat to Actions as chats arrive; weekly P6 Schedule Health Review.
 - Wissam (operations, AUH): `/walkthru-general:morning` + `/walkthru-site-operations:site-day` daily; `/walkthru-finance-commercial:invoice-check` weekly.
+- Kareem (estimation/commercial): `/walkthru-estimation-commercial:tender-week` weekly; quotation comparison and BOQ/spec check per tender.
+- Salah (technical): `/walkthru-engineering:technical-review` daily.
+- Rawad / Hady / Islam (finance): `/walkthru-finance-commercial:finance-day` daily; `monthly-owners-report` at month-end.
+- Chadi / George (PRO, HR): `/walkthru-hr-admin:pro-day` daily; attendance/OT check and MOHRE renewal batches as needed.
 - Rami (operations, DXB): `/walkthru-general:morning` + `/walkthru-site-operations:site-day` daily; `/walkthru-engineering:engineering-week` weekly.
 
 Additional skills are introduced after each participant completes one reviewed result on those routines. Contractual, tax, payroll or certification decisions remain with the responsible department.

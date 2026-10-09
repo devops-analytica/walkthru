@@ -1,0 +1,73 @@
+{
+  "scope": "department plugin eval runs 2026-10-09, ablation none, runs 1",
+  "plugins": {
+    "walkthru-estimation-commercial": {
+      "casesTotal": 5,
+      "casesPassed": 4,
+      "costUsd": 0.77,
+      "cases": {
+        "boq-spec-check-1": 0.5,
+        "quotation-comparison-1": 1,
+        "quotation-comparison-2": 1,
+        "tender-pipeline-tracker-1": 1,
+        "variation-register-1": 1
+      }
+    },
+    "walkthru-engineering": {
+      "casesTotal": 6,
+      "casesPassed": 6,
+      "costUsd": 0.96,
+      "cases": {
+        "consultant-comment-evaluation-1": 1,
+        "method-statement-draft-1": 1,
+        "shop-drawing-review-1": 1,
+        "shop-drawing-review-2": 1,
+        "submittal-wir-tracker-1": 1,
+        "submittal-wir-tracker-2": 1
+      }
+    },
+    "walkthru-finance-commercial": {
+      "casesTotal": 7,
+      "casesPassed": 6,
+      "costUsd": 1.25,
+      "cases": {
+        "ar-ap-aging-review-1": 1,
+        "cash-position-reconciliation-1": 0.5,
+        "invoice-po-check-1": 1,
+        "invoice-po-check-2": 1,
+        "monthly-owners-report-1": 1,
+        "monthly-owners-report-2": 1,
+        "payment-application-check-1": 1
+      }
+    },
+    "walkthru-hr-admin": {
+      "casesTotal": 4,
+      "casesPassed": 3,
+      "costUsd": 0.63,
+      "cases": {
+        "attendance-overtime-check-1": 1,
+        "mohre-renewal-batch-1": 1,
+        "permit-visa-status-tracker-1": 1,
+        "permit-visa-status-tracker-2": 0.5
+      }
+    }
+  },
+  "reruns": {
+    "boq-spec-check-1": {
+      "score": 1,
+      "startedAt": "2026-10-09T07:29:48.003Z",
+      "reason": "rubric tightened to essential invariants after an over-specified criterion failed on a correct answer"
+    },
+    "cash-position-reconciliation-1": {
+      "score": 1,
+      "startedAt": "2026-10-09T07:30:53.104Z",
+      "reason": "rubric tightened to essential invariants after an over-specified criterion failed on a correct answer"
+    },
+    "permit-visa-status-tracker-2": {
+      "score": 1,
+      "startedAt": "2026-10-09T07:30:53.169Z",
+      "reason": "rubric tightened to essential invariants after an over-specified criterion failed on a correct answer"
+    }
+  },
+  "skill_fired": "22/22 across the four department plugins"
+}

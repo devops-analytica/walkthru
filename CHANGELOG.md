@@ -1,5 +1,7 @@
 # Organisation release 2.1.0 — 09-Oct-2026
 
+- Added 13 skills from the employee role profiles: `estimation-commercial/` (quotation-comparison, boq-spec-check, tender-pipeline-tracker, variation-register), `engineering/` (shop-drawing-review, consultant-comment-evaluation, method-statement-draft), `finance-commercial/` (monthly-owners-report, cash-position-reconciliation, ar-ap-aging-review), `hr-admin/` (permit-visa-status-tracker, attendance-overtime-check, mohre-renewal-batch); 4 new routine commands; 18 new eval cases. Two new department plugins (`walkthru-estimation-commercial`, `walkthru-hr-admin`).
+- index.html and docs/SKILL-CATALOGUE.md are now rendered from catalog.json by the build.
 - Rewrote all 16 skill descriptions with explicit "Use when" trigger phrases and WalkThru vocabulary (DPR, LPO, WIR, MOM, IPA, XER…) so skills fire from ordinary requests; validator now requires a trigger clause and allows up to 1024 characters.
 - Helpers invoked as `python3`; the four script-bearing skills declare `allowed-tools: Bash(python3 *) Read Write`.
 - Added five starter-routine slash commands (`/walkthru-general:morning`, `site-day`, `planning-week`, `invoice-check`, `engineering-week`).

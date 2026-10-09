@@ -1,11 +1,13 @@
 {
   "version": "2.1.0",
   "path": "releases/2.1.0",
-  "individual_skills": 16,
+  "individual_skills": 29,
   "plugins": [
     "walkthru-engineering",
+    "walkthru-estimation-commercial",
     "walkthru-finance-commercial",
     "walkthru-general",
+    "walkthru-hr-admin",
     "walkthru-planning",
     "walkthru-procurement",
     "walkthru-site-operations",

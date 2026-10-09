@@ -2,14 +2,14 @@
 
 Organisation release 2.1.0 · 09-Oct-2026. **Start with [index.html](index.html)** or [docs/START-HERE.md](docs/START-HERE.md).
 
-16 unique maintained WalkThru skills, grouped by department, shipped three ways from one source tree: standalone skill ZIPs, one Claude plugin per department (plus `walkthru-general` for every role), and an all-in-one plugin — all listed in a Claude Code marketplace at the repo root. Only `skills/`, `commands/`, `evals/` and `config/` are source; `plugins/` and `releases/` are generated.
+29 unique maintained WalkThru skills across 8 departments, shipped three ways from one source tree: standalone skill ZIPs, one Claude plugin per department (plus `walkthru-general` for every role), and an all-in-one plugin — all listed in a Claude Code marketplace at the repo root. Only `skills/`, `commands/`, `evals/` and `config/` are source; `plugins/` and `releases/` are generated.
 
 ```
 index.html                 searchable current skill catalogue
 catalog.json               maintained source/department/acceptance map
 .claude-plugin/            marketplace.json (generated) — /plugin marketplace add <this repo>
-skills/<department>/       general · site-operations · engineering
-                           procurement · finance-commercial · planning
+skills/<department>/       general · site-operations · engineering · procurement
+                           finance-commercial · planning · estimation-commercial · hr-admin
 commands/<department>/     starter-routine slash commands (/walkthru-general:morning …)
 evals/                     behavioral eval cases for `claude plugin eval`
 config/                    shared evidence rules, project settings, plugin README template

@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-estimation-commercial",
+  "version": "2.1.0",
+  "description": "WalkThru Estimation, tendering and contracts workflows (4 skills): Supplier and subcontractor quotation comparison, BOQ and specification check, Tender register and weekly pipeline, Variation (VO/VR) register. Evidence-based drafts; optional Microsoft 365 read access.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}

@@ -82,10 +82,10 @@ def main():
  marketplace={'$schema':'https://anthropic.com/claude-code/marketplace.schema.json','name':'walkthru','description':'WalkThru contracting workflows for Claude: one general plugin for everyone plus one plugin per department, or the all-in-one package.','owner':{'name':'WalkThru internal toolkit'},'metadata':{'version':VERSION},'plugins':[{'name':plugin_name(c),'source':'./plugins/'+plugin_name(c),'description':plugin_description(c,[s for s in skills if c=='all' or s['category']==c]),'version':VERSION,'category':'productivity','author':{'name':'WalkThru internal toolkit'}} for c in ['all']+categories]}
  (ROOT/'.claude-plugin/marketplace.json').write_text(json.dumps(marketplace,indent=2)+'\n')
  release=ROOT/'releases'/VERSION
- evals_record=(release/'evals.json').read_bytes() if (release/'evals.json').exists() else None  # keep the recorded eval run across rebuilds
+ evals_records={p.name:p.read_bytes() for p in release.glob('evals*.json')} if release.exists() else {}  # keep recorded eval runs across rebuilds
  if release.exists():shutil.rmtree(release)
  release.mkdir(parents=True)
- if evals_record:(release/'evals.json').write_bytes(evals_record)
+ for name,data in evals_records.items():(release/name).write_bytes(data)
  packages=[]
  for s in skills:
   path=release/'skills'/s['category']/(s['name']+'.zip')

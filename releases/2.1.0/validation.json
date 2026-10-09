@@ -6,22 +6,22 @@
     {
       "check": "Catalogue and references",
       "status": "passed",
-      "detail": "16 unique current names, trigger descriptions, python3 helpers and local skill links"
+      "detail": "29 unique current names, trigger descriptions, python3 helpers and local skill links"
     },
     {
       "check": "Routine commands",
       "status": "passed",
-      "detail": "5 routine commands reference existing skills"
+      "detail": "9 routine commands reference existing skills"
     },
     {
       "check": "Plugins and marketplace",
       "status": "passed",
-      "detail": "7 plugins match source; marketplace lists them all"
+      "detail": "9 plugins match source; marketplace lists them all"
     },
     {
       "check": "claude plugin validate",
       "status": "passed",
-      "detail": "claude plugin validate passed: WalkThru-Claude-Toolkit, walkthru-engineering, walkthru-finance-commercial, walkthru-general, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
+      "detail": "claude plugin validate passed: WalkThru-Claude-Toolkit, walkthru-engineering, walkthru-estimation-commercial, walkthru-finance-commercial, walkthru-general, walkthru-hr-admin, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
     },
     {
       "check": "Package/source parity",
@@ -46,7 +46,7 @@
     {
       "check": "Syntax and config",
       "status": "passed",
-      "detail": "21 maintained/generated Python files parsed; JSON checked, connector not authenticated"
+      "detail": "27 maintained/generated Python files parsed; JSON checked, connector not authenticated"
     },
     {
       "check": "Catalogue links",
@@ -57,7 +57,7 @@
       "check": "Original helper regressions",
       "status": "passed",
       "tests": 39,
-      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.043s\n\nOK\n"
+      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.099s\n\nOK\n"
     },
     {
       "check": "Everyday invoice regressions",

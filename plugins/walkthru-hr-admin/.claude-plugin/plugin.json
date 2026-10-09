@@ -1,0 +1,8 @@
+{
+  "name": "walkthru-hr-admin",
+  "version": "2.1.0",
+  "description": "WalkThru HR, administration and PRO workflows (3 skills): Permit and visa status tracker, Attendance and overtime check, MOHRE renewal batch. Evidence-based drafts; optional Microsoft 365 read access.",
+  "author": {
+    "name": "WalkThru internal toolkit"
+  }
+}
