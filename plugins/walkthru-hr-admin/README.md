@@ -12,7 +12,7 @@ The toolkit ships one plugin per department plus `walkthru-general` (skills ever
 Claude Code (2.1.275 or later), from the published repository:
 
 ```
-/plugin marketplace add analytica-data/WalkThru-Claude-Toolkit
+/plugin marketplace add devops-analytica/walkthru
 /plugin install walkthru-hr-admin@walkthru
 ```
 

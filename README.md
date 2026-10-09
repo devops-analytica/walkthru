@@ -27,6 +27,6 @@ Build: `python3 maintenance/build_release.py`
 Validate: `python3 maintenance/validate_release.py`
 Behavioral evals: `claude plugin eval ./plugins/walkthru-workflows --trust-plugin --ablation none --runs 1`
 
-Install (Claude Code): `/plugin marketplace add <owner>/<repo>` then `/plugin install walkthru-general@walkthru` + `walkthru-<department>@walkthru`, **or** `walkthru-workflows@walkthru` alone. See `config/plugin-setup.md`.
+Install (Claude Code): `/plugin marketplace add devops-analytica/walkthru` then `/plugin install walkthru-general@walkthru` + `walkthru-<department>@walkthru`, **or** `walkthru-workflows@walkthru` alone. See `config/plugin-setup.md`.
 
 Local tests and evals are separate from real employee/project acceptance, which remains pending. No live integration, org-wide deployment or email sending was performed. The earlier layout is preserved in archive/pre-organisation-2026-10-09; do not install duplicate archived skills.

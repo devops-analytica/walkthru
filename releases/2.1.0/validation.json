@@ -21,7 +21,7 @@
     {
       "check": "claude plugin validate",
       "status": "passed",
-      "detail": "claude plugin validate passed: WalkThru-Claude-Toolkit, walkthru-engineering, walkthru-estimation-commercial, walkthru-finance-commercial, walkthru-general, walkthru-hr-admin, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
+      "detail": "claude plugin validate passed: walkthru, walkthru-engineering, walkthru-estimation-commercial, walkthru-finance-commercial, walkthru-general, walkthru-hr-admin, walkthru-planning, walkthru-procurement, walkthru-site-operations, walkthru-workflows"
     },
     {
       "check": "Package/source parity",
@@ -57,7 +57,7 @@
       "check": "Original helper regressions",
       "status": "passed",
       "tests": 39,
-      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.099s\n\nOK\n"
+      "detail": ".......................................\n----------------------------------------------------------------------\nRan 39 tests in 0.039s\n\nOK\n"
     },
     {
       "check": "Everyday invoice regressions",

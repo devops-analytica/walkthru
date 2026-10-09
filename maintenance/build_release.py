@@ -6,7 +6,7 @@ from zipfile import ZipFile,ZIP_DEFLATED,ZipInfo
 ROOT=Path(__file__).resolve().parents[1]
 VERSION='2.1.0'
 ZIP_DATE=(2026,10,9,0,0,0)
-MARKETPLACE_REPO='analytica-data/WalkThru-Claude-Toolkit'  # update when the repo is pushed
+MARKETPLACE_REPO='devops-analytica/walkthru'
 HELPERS={'xer_check.py':['p6-programme-review','planning-weekly-report'],'operation_checks.py':['invoice-po-check','walkthru-deadline-watch','planning-weekly-report']}
 MCP={'mcpServers':{'microsoft365':{'type':'http','url':'https://microsoft365.mcp.claude.com/mcp'}}}
 CATEGORY_TITLES={'general':'General and coordination','site-operations':'Site and operations','engineering':'Engineering, technical and document control','procurement':'Procurement and materials','finance-commercial':'Finance and commercial','planning':'Planning and project controls','estimation-commercial':'Estimation, tendering and contracts','hr-admin':'HR, administration and PRO'}
