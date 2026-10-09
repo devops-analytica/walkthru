@@ -42,7 +42,8 @@ COMING UP (next 2 weeks)
 
 - **Impact is specific**: "Handover slips ~3 weeks; LD exposure from 15 Nov" beats "may cause delay". Use the numbers in the source.
 - **Every issue has a recommendation**: what the writer suggests management do (approve, decide, call the client, release payment, add resources). If the writer needs a decision, say which options and which one they recommend.
-- **Owner is one person or company**, and "By" is a date.
+- **Owner is one person or company named in the source**, and "By" is a date. If the source names nobody, write "To confirm"; do not nominate a role or person. Recommendations stay operational; do not add contractual positions (EOT claims, rights reservation, LD threats) unless the source raises them.
+- **Reported stays reported**: "No HSE incidents reported" is not "no incidents" or "site safe"; "approved" needs the approval evidence. Keep the source's qualifier. State progress variance as actual minus planned in percentage points (55% vs 62% = −7 pp).
 - **Only exceptions**: projects that are on track take one row, no commentary. Limit the decisions table to the items that need management; move the rest to an optional appendix.
 - **RAG rules**: 🔴 if a contractual milestone or handover is at risk, a safety incident occurred, or cost overrun exceeds budget contingency; 🟠 if float is being consumed or an approval or payment is overdue; 🟢 otherwise. State the reason in "Key issue".
 
