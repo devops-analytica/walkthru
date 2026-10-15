@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 evals/results/
 plugins/*/evals/results/
+
+# PII — employee profiles must never be committed
+references/employee-profiles/
+archive/pre-organisation-2026-10-09/Re__Walk_Thru_AI_Program_Presentation_Day_1/
+archive/pre-organisation-2026-10-09/Re__Walk_Thru_AI_Program_Presentation_Day_1.zip
